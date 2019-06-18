@@ -117,4 +117,10 @@ enum ResponseCodeEnum {
   INVALID_RECEIVE_RECORD_THRESHOLD=86; // attempt to set negative receive record threshold
   INVALID_SEND_RECORD_THRESHOLD=87; // attempt to set negative send record threshold
   ACCOUNT_IS_NOT_GENESIS_ACCOUNT = 88; // Special Account Operations should be performed by only Genesis account, return this code if it is not Genesis Account
+
+  INVALID_TOPIC_ID = 89;
+  TOPIC_DELETED = 90;
+  MESSAGE_TOO_LONG = 91;
+  TOPIC_NOT_YET_ENABLED = 92;
+  TOPIC_EXPIRED = 93;
 }

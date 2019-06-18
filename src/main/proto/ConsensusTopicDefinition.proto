@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "com.hederahashgraph.api.proto.java";
+option java_multiple_files = true;
+
+import "BasicTypes.proto";
+import "Timestamp.proto";
+
+// Metadata about the topic that is defined on creation and modified via administrators.
+message ConsensusTopicDefinition {
+    string memo = 1; // Short non-unique, publicly visible memo about the topic.
+    Timestamp creationTime = 2; // When the topic should become available (empty = now).
+    Timestamp expirationTime = 3; // When the topic should cease accepting transactions.
+    oneof adminAuthorization {
+        Key adminKey = 4; // Who can change/delete this topic. Defaults to requester if empty.
+    }
+    oneof submitAuthorization {
+        Key submitKey = 5; // Who can submitMessage (empty means anyone can). Defaults to empty.
+    }
+}

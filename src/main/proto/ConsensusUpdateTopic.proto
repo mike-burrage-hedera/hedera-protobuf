@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "com.hederahashgraph.api.proto.java";
+option java_multiple_files = true;
+
+import "BasicTypes.proto";
+import "Timestamp.proto";
+
+message ConsensusUpdateTopicTransactionBody {
+    TopicID topicID = 1;
+    string memo = 2;
+    Timestamp creationTime = 3;
+    Timestamp expirationTime = 4;
+    Key adminKey = 5; // Who can change/delete this topic
+    Key submitKey = 6; // Who can submitMessage (empty means anyone can).
+}

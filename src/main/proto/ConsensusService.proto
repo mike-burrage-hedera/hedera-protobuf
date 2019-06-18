@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "com.hederahashgraph.service.proto.java";
+
+import "Query.proto";
+import "Response.proto";
+import "TransactionResponse.proto";
+import "Transaction.proto";
+
+/*
+ * The request and responses for different functions of the Consensus Service.
+ * The Consensus Service provides the ability to sequence (order) messages on a topic, with access control based on
+ * digital signature verification.
+*/
+service ConsensusService {
+    /* Create a topic to be used for consensus.
+     * [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody)
+     */
+    rpc createTopic (Transaction) returns (TransactionResponse);
+
+    /* Update a topic.
+     * [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody)
+     */
+    rpc updateTopic (Transaction) returns (TransactionResponse);
+
+    /* Mark a topic as deleted.
+     * [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody)
+     */
+    rpc deleteTopic (Transaction) returns (TransactionResponse);
+
+    /* Retrieve information about a topic including the sequenceNumber and runningHash.
+     * [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
+     * [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)
+     */
+    rpc getInfo (Query) returns (Response);
+
+    /*
+     * Submit a message for consensus.
+     * Valid messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and
+     * published (in order) to all subscribers (from the mirror net) on this topic.
+     * [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody)
+     */
+    rpc submitMessage (Transaction) returns (TransactionResponse);
+}
