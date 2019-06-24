@@ -1072,13 +1072,13 @@ The functionality provided by hedera hashgraph
 <a name="proto.ConsensusGetInfoQuery"></a>
 
 ### ConsensusGetInfoQuery
-
+See [ConsensusService.getInfo()](#proto.ConsensusService)
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | header | [QueryHeader](#proto.QueryHeader) |  | standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). |
-| topicID | [TopicID](#proto.TopicID) |  | Topic to retrieve. |
+| topicID | [TopicID](#proto.TopicID) |  | Topic to retrieve info about (the running state of). |
 
 
 
@@ -1097,6 +1097,8 @@ Retrieve info about a consensus topic.
 | topicID | [TopicID](#proto.TopicID) |  | Topic identifier. |
 | topicDefinition | [ConsensusTopicDefinition](#proto.ConsensusTopicDefinition) |  | Topic definition. |
 | topicState | [ConsensusTopicState](#proto.ConsensusTopicState) |  | Topic&#39;s consensus state. |
+| message | [bytes](#bytes) |  |  |
+| definition | [bool](#bool) |  |  |
 
 
 
@@ -1128,17 +1130,34 @@ Retrieve info about a consensus topic.
 <a name="proto.ConsensusService"></a>
 
 ### ConsensusService
-The request and responses for different functions of the Consensus Service.
-The Consensus Service provides the ability to sequence (order) messages on a topic, with access control based on
-digital signature verification.
+The Consensus Service provides the ability for Hedera Hashgraph to provide aBFT consensus as to the order and
+validity of messages submitted to a *topic*, as well as a *consensus timestamp* for those messages.
+
+Authorization of submitted messages is based on the application of rules specified in the
+[topic&#39;s](#proto.ConsensusTopicDefinition) [submitKey](#proto.Key).
+
+Authorization for submitted messages is optional.
+
+Authorization as to modification (_update/delete_) of the topic is based on the application of rules specified in the
+[topic&#39;s](#proto.ConsensusTopicDefinition) [adminKey](#proto.Key).
+
+These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N
+signatures required), contract evaluation, etc.
+
+Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until date/time T.
+
+A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.
+
+Mirrornet consensus services may be used to subscribe to changes on the topic, including changes to the topic
+definition and the consensus ordering and timestamp of submitted messages.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| createTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Create a topic to be used for consensus. [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody) |
-| updateTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Update a topic. [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody) |
-| deleteTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Mark a topic as deleted. [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody) |
-| getInfo | [Query](#proto.Query) | [Response](#proto.Response) | Retrieve information about a topic including the sequenceNumber and runningHash. [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery) [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse) |
-| submitMessage | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Submit a message for consensus. Valid messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and published (in order) to all subscribers (from the mirror net) on this topic. [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody) |
+| createTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Create a topic to be used for consensus. Request is [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody) |
+| updateTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Update a topic. Request is [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody) |
+| deleteTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Mark a topic as deleted. Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody) |
+| getInfo | [Query](#proto.Query) | [Response](#proto.Response) | Retrieve information about a topic including the latest state (sequenceNumber and runningHash), and the topic&#39;s definition (valid message submission timespan, authorization rules, etc). Request is [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery) Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse) |
+| submitMessage | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Submit a message for consensus. Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and published (in order) to all subscribers (from the mirror net) on this topic. Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody) |
 
  
 
@@ -1154,7 +1173,7 @@ digital signature verification.
 <a name="proto.ConsensusSubmitMessageTransactionBody"></a>
 
 ### ConsensusSubmitMessageTransactionBody
-
+TODO: 4000 bytes may be incorrect (too large).
 
 
 | Field | Type | Label | Description |
@@ -1186,16 +1205,18 @@ digital signature verification.
 <a name="proto.ConsensusTopicDefinition"></a>
 
 ### ConsensusTopicDefinition
-Metadata about the topic that is defined on creation and modified via administrators.
+Metadata about the topic that is defined on creation and modified via enforcement of rules specified by the adminKey.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | memo | [string](#string) |  | Short non-unique, publicly visible memo about the topic. |
-| creationTime | [Timestamp](#proto.Timestamp) |  | When the topic should become available (empty = now). |
-| expirationTime | [Timestamp](#proto.Timestamp) |  | When the topic should cease accepting transactions. |
-| adminKey | [Key](#proto.Key) |  | Who can change/delete this topic. Defaults to requester if empty. |
-| submitKey | [Key](#proto.Key) |  | Who can submitMessage (empty means anyone can). Defaults to empty. |
+| creationTime | [Timestamp](#proto.Timestamp) |  | When the topic should become available to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests _before_ this timestamp. If unspecified, no creation timestamp is used. |
+| expirationTime | [Timestamp](#proto.Timestamp) |  | When the topic should cease availability to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests from this timestamp forward. If unspecified, no expiration timestamp is used.
+
+When the topic should cease accepting transactions. |
+| adminKey | [Key](#proto.Key) |  | Who can change/delete this topic. Defaults to requester if unspecified on create. |
+| submitKey | [Key](#proto.Key) |  | Who can submitMessage (empty means anyone can). Defaults to allowing anyone to submit. |
 
 
 

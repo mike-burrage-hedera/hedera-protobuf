@@ -11,9 +11,10 @@ import "ResponseHeader.proto";
 import "ConsensusTopicDefinition.proto";
 import "ConsensusTopicState.proto";
 
+// See [ConsensusService.getInfo()](#proto.ConsensusService)
 message ConsensusGetInfoQuery {
     QueryHeader header = 1; // standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither).
-    TopicID topicID = 2; // Topic to retrieve.
+    TopicID topicID = 2; // Topic to retrieve info about (the running state of).
 }
 
 // Retrieve info about a consensus topic.
@@ -23,5 +24,11 @@ message ConsensusGetInfoResponse {
     TopicID topicID = 2; // Topic identifier.
     ConsensusTopicDefinition topicDefinition = 3; // Topic definition.
     ConsensusTopicState topicState = 4; // Topic's consensus state.
-}
 
+    // The topicState is either the result of the last submitMessage() message returned here, or a change to the
+    // topic's definition (indicated by the _definition_ option).
+    oneof last {
+       bytes message = 5;
+       bool definition = 6;
+    }
+}

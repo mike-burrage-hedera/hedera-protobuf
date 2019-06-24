@@ -2552,7 +2552,7 @@
 
       
         <h3 id="proto.ConsensusGetInfoQuery">ConsensusGetInfoQuery</h3>
-        <p></p>
+        <p>See [ConsensusService.getInfo()](#proto.ConsensusService)</p>
 
         
           <table class="field-table">
@@ -2572,7 +2572,7 @@
                   <td>topicID</td>
                   <td><a href="#proto.TopicID">TopicID</a></td>
                   <td></td>
-                  <td><p>Topic to retrieve. </p></td>
+                  <td><p>Topic to retrieve info about (the running state of). </p></td>
                 </tr>
               
             </tbody>
@@ -2620,6 +2620,20 @@
                   <td><p>Topic&#39;s consensus state. </p></td>
                 </tr>
               
+                <tr>
+                  <td>message</td>
+                  <td><a href="#bytes">bytes</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>definition</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -2648,7 +2662,7 @@
 
       
         <h3 id="proto.ConsensusService">ConsensusService</h3>
-        <p>The request and responses for different functions of the Consensus Service.</p><p>The Consensus Service provides the ability to sequence (order) messages on a topic, with access control based on</p><p>digital signature verification.</p>
+        <p>The Consensus Service provides the ability for Hedera Hashgraph to provide aBFT consensus as to the order and</p><p>validity of messages submitted to a *topic*, as well as a *consensus timestamp* for those messages.</p><p>Authorization of submitted messages is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [submitKey](#proto.Key).</p><p>Authorization for submitted messages is optional.</p><p>Authorization as to modification (_update/delete_) of the topic is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [adminKey](#proto.Key).</p><p>These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N</p><p>signatures required), contract evaluation, etc.</p><p>Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until date/time T.</p><p>A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.</p><p>Mirrornet consensus services may be used to subscribe to changes on the topic, including changes to the topic</p><p>definition and the consensus ordering and timestamp of submitted messages.</p>
         <table class="enum-table">
           <thead>
             <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
@@ -2660,7 +2674,7 @@
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Create a topic to be used for consensus.
-[ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody)</p></td>
+Request is [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody)</p></td>
               </tr>
             
               <tr>
@@ -2668,7 +2682,7 @@
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Update a topic.
-[ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody)</p></td>
+Request is [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody)</p></td>
               </tr>
             
               <tr>
@@ -2676,16 +2690,17 @@
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Mark a topic as deleted.
-[ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody)</p></td>
+Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody)</p></td>
               </tr>
             
               <tr>
                 <td>getInfo</td>
                 <td><a href="#proto.Query">Query</a></td>
                 <td><a href="#proto.Response">Response</a></td>
-                <td><p>Retrieve information about a topic including the sequenceNumber and runningHash.
-[ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
-[ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)</p></td>
+                <td><p>Retrieve information about a topic including the latest state (sequenceNumber and runningHash), and the topic&#39;s
+definition (valid message submission timespan, authorization rules, etc).
+Request is [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
+Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)</p></td>
               </tr>
             
               <tr>
@@ -2693,9 +2708,9 @@
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Submit a message for consensus.
-Valid messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and
+Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and
 published (in order) to all subscribers (from the mirror net) on this topic.
-[ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody)</p></td>
+Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody)</p></td>
               </tr>
             
           </tbody>
@@ -2711,7 +2726,7 @@ published (in order) to all subscribers (from the mirror net) on this topic.
 
       
         <h3 id="proto.ConsensusSubmitMessageTransactionBody">ConsensusSubmitMessageTransactionBody</h3>
-        <p></p>
+        <p>TODO: 4000 bytes may be incorrect (too large).</p>
 
         
           <table class="field-table">
@@ -2756,7 +2771,7 @@ published (in order) to all subscribers (from the mirror net) on this topic.
 
       
         <h3 id="proto.ConsensusTopicDefinition">ConsensusTopicDefinition</h3>
-        <p>Metadata about the topic that is defined on creation and modified via administrators.</p>
+        <p>Metadata about the topic that is defined on creation and modified via enforcement of rules specified by the adminKey.</p>
 
         
           <table class="field-table">
@@ -2776,28 +2791,34 @@ published (in order) to all subscribers (from the mirror net) on this topic.
                   <td>creationTime</td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
-                  <td><p>When the topic should become available (empty = now). </p></td>
+                  <td><p>When the topic should become available to receive messages via ConsensusService.submitMessage().
+The topic will not accept submitMessage() requests _before_ this timestamp.
+If unspecified, no creation timestamp is used. </p></td>
                 </tr>
               
                 <tr>
                   <td>expirationTime</td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
-                  <td><p>When the topic should cease accepting transactions. </p></td>
+                  <td><p>When the topic should cease availability to receive messages via ConsensusService.submitMessage().
+The topic will not accept submitMessage() requests from this timestamp forward.
+If unspecified, no expiration timestamp is used.
+
+When the topic should cease accepting transactions. </p></td>
                 </tr>
               
                 <tr>
                   <td>adminKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can change/delete this topic. Defaults to requester if empty. </p></td>
+                  <td><p>Who can change/delete this topic. Defaults to requester if unspecified on create. </p></td>
                 </tr>
               
                 <tr>
                   <td>submitKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can submitMessage (empty means anyone can). Defaults to empty. </p></td>
+                  <td><p>Who can submitMessage (empty means anyone can). Defaults to allowing anyone to submit. </p></td>
                 </tr>
               
             </tbody>
