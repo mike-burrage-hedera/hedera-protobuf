@@ -24,11 +24,4 @@ message ConsensusGetInfoResponse {
     TopicID topicID = 2; // Topic identifier.
     ConsensusTopicDefinition topicDefinition = 3; // Topic definition.
     ConsensusTopicState topicState = 4; // Topic's consensus state.
-
-    // The topicState is either the result of the last submitMessage() message returned here, or a change to the
-    // topic's definition (indicated by the _definition_ option).
-    oneof last {
-       bytes message = 5;
-       bool definition = 6;
-    }
 }

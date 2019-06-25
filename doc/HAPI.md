@@ -1097,8 +1097,6 @@ Retrieve info about a consensus topic.
 | topicID | [TopicID](#proto.TopicID) |  | Topic identifier. |
 | topicDefinition | [ConsensusTopicDefinition](#proto.ConsensusTopicDefinition) |  | Topic definition. |
 | topicState | [ConsensusTopicState](#proto.ConsensusTopicState) |  | Topic&#39;s consensus state. |
-| message | [bytes](#bytes) |  |  |
-| definition | [bool](#bool) |  |  |
 
 
 
