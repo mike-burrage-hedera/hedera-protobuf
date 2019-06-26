@@ -1,5 +1,8 @@
 /target/
 /bin/
 .classpath
+.idea/
+.java-version
 .settings/
 .project
+/javadoc/

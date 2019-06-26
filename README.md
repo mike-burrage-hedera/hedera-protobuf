@@ -17,13 +17,14 @@ The protobuf files are organised in folders representing the domain they pertain
 
 The protobuf files themselves contain detailed comments which help understand not only the message itself but also some of the features and capabilities of the Hedera Hashgraph network.
 
-Also available is a [HAPI.html](https://github.com/hashgraph/hedera-protobuf/blob/master/HAPI.html) document which is a HTML version of the protocol buffers file with hyperlinks to help navigate through the message definitions. It is also nested such that you can follow a complete message structure.
+Also available is a [HAPI.md](https://hashgraph.github.io/hedera-protobuf/HAPI.md) and [HAPI.html](https://hashgraph.github.io/hedera-protobuf/HAPI.html) document which is a HTML version of the protocol buffers file with hyperlinks to help navigate through the message definitions. It is also nested such that you can follow a complete message structure.
 
 __Note__: the HAPI.html document is a large document and may take a few seconds to load in a browser.
 
 # Examples
 
-Example messages can be found in the [Transaction-Query-Examples.md](https://github.com/hashgraph/hedera-protobuf/blob/master/Transaction-Query-Examples.md) file. These were generated with the [Hedera Hashgraph Java SDK](https://github.com/hashgraph/hedera-sdk-java) and may serve as a useful reference when checking if your own messages are correct.
+Example messages can be found in the [Transaction-Query-Examples.md](https://hashgraph.github.com/hedera-protobuf/Transaction-Query-Examples.md) file.
+These were generated with the [Hedera Hashgraph Java SDK](https://github.com/hashgraph/hedera-sdk-java) and may serve as a useful reference when checking if your own messages are correct.
 
 __Note__: The examples show keys and signatures. Keys shown in the examples are not the keys that were used to generate the signatures.
 
