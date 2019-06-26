@@ -47,9 +47,11 @@
 
     <properties>
         <app.name>hedera-protobuf-java-api</app.name>
+        <doclint>none</doclint>
         <log4j-version>2.8.2</log4j-version>
         <grpc.version>1.13.1</grpc.version>
         <os.plugin.version>1.6.0</os.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <protobuf.plugin.version>0.5.0</protobuf.plugin.version>
         <protoc.version>3.5.1</protoc.version>
     </properties>
@@ -83,7 +85,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.5.1</version>
+            <version>${protoc.version}</version>
         </dependency>
 
         <dependency>
@@ -114,7 +116,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
-            <version>2.8.2</version>
+            <version>${log4j-version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -150,7 +152,6 @@
               </plugin>
           </plugins>
       </pluginManagement>
-
       <!-- applying plugins to the maven build -->
 <plugins>
         <plugin>
@@ -175,6 +176,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -193,6 +195,8 @@
       				<configuration>
       					<javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
       					<additionalOptions>-html5</additionalOptions>
+      					<nocomment>true</nocomment>
+      					<notimestamp>true</notimestamp>
       					<reportOutputDirectory>${project.basedir}/javadoc</reportOutputDirectory>
       				</configuration>
       				<executions>

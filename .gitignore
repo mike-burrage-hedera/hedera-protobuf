@@ -3,3 +3,8 @@
 .classpath
 .settings/
 .project
+.idea/
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+.java-version
