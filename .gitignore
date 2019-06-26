@@ -5,3 +5,5 @@
 .java-version
 .settings/
 .project
+/src/
+pom.xml
