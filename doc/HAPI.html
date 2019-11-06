@@ -175,36 +175,6 @@
         
           
           <li>
-            <a href="#AdminDelete.proto">AdminDelete.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#proto.AdminDeleteTransactionBody"><span class="badge">M</span>AdminDeleteTransactionBody</a>
-                </li>
-              
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
-            <a href="#AdminUndelete.proto">AdminUndelete.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#proto.AdminUndeleteTransactionBody"><span class="badge">M</span>AdminUndeleteTransactionBody</a>
-                </li>
-              
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
             <a href="#BasicTypes.proto">BasicTypes.proto</a>
             <ul>
               
@@ -338,15 +308,15 @@
         
           
           <li>
-            <a href="#ConsensusGetInfo.proto">ConsensusGetInfo.proto</a>
+            <a href="#ConsensusGetTopicInfo.proto">ConsensusGetTopicInfo.proto</a>
             <ul>
               
                 <li>
-                  <a href="#proto.ConsensusGetInfoQuery"><span class="badge">M</span>ConsensusGetInfoQuery</a>
+                  <a href="#proto.ConsensusGetTopicInfoQuery"><span class="badge">M</span>ConsensusGetTopicInfoQuery</a>
                 </li>
               
                 <li>
-                  <a href="#proto.ConsensusGetInfoResponse"><span class="badge">M</span>ConsensusGetInfoResponse</a>
+                  <a href="#proto.ConsensusGetTopicInfoResponse"><span class="badge">M</span>ConsensusGetTopicInfoResponse</a>
                 </li>
               
               
@@ -570,21 +540,6 @@
               
                 <li>
                   <a href="#proto.ContractUpdateTransactionBody"><span class="badge">M</span>ContractUpdateTransactionBody</a>
-                </li>
-              
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
-            <a href="#CreateFeeSchedule.proto">CreateFeeSchedule.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#proto.CreateFeeScheduleTransactionBody"><span class="badge">M</span>CreateFeeScheduleTransactionBody</a>
                 </li>
               
               
@@ -974,6 +929,36 @@
         
           
           <li>
+            <a href="#Freeze.proto">Freeze.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#proto.FreezeTransactionBody"><span class="badge">M</span>FreezeTransactionBody</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#FreezeService.proto">FreezeService.proto</a>
+            <ul>
+              
+              
+              
+              
+                <li>
+                  <a href="#proto.FreezeService"><span class="badge">S</span>FreezeService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#GetByKey.proto">GetByKey.proto</a>
             <ul>
               
@@ -1296,103 +1281,6 @@
     
       
       <div class="file-heading">
-        <h2 id="AdminDelete.proto">AdminDelete.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="proto.AdminDeleteTransactionBody">AdminDeleteTransactionBody</h3>
-        <p>Delete a file or smart contract - can only be done with a Hedera admin multisig. When it is deleted, it immediately disappears from the system as seen by the user, but is still stored internally until the expiration time, at which time it is truly and permanently deleted. Until that time, it can be undeleted by the Hedera admin multisig. When a smart contract is deleted, the cryptocurrency account within it continues to exist, and is not affected by the expiration time here.</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>fileID</td>
-                  <td><a href="#proto.FileID">FileID</a></td>
-                  <td></td>
-                  <td><p>the file to delete, in the format used in transactions </p></td>
-                </tr>
-              
-                <tr>
-                  <td>contractID</td>
-                  <td><a href="#proto.ContractID">ContractID</a></td>
-                  <td></td>
-                  <td><p>the contract instance to delete, in the format used in transactions </p></td>
-                </tr>
-              
-                <tr>
-                  <td>expirationTime</td>
-                  <td><a href="#proto.TimestampSeconds">TimestampSeconds</a></td>
-                  <td></td>
-                  <td><p>the time at which the &#34;deleted&#34; file should truly be permanently deleted </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
-        <h2 id="AdminUndelete.proto">AdminUndelete.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="proto.AdminUndeleteTransactionBody">AdminUndeleteTransactionBody</h3>
-        <p>Undelete a file or smart contract that was deleted by AdminDelete - can only be done with a Hedera admin multisig. When it is deleted, it immediately disappears from the system as seen by the user, but is still stored internally until the expiration time, at which time it is truly and permanently deleted. Until that time, it can be undeleted by the Hedera admin multisig. When a smart contract is deleted, the cryptocurrency account within it continues to exist, and is not affected by the expiration time here.</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>fileID</td>
-                  <td><a href="#proto.FileID">FileID</a></td>
-                  <td></td>
-                  <td><p>the file to undelete, in the format used in transactions </p></td>
-                </tr>
-              
-                <tr>
-                  <td>contractID</td>
-                  <td><a href="#proto.ContractID">ContractID</a></td>
-                  <td></td>
-                  <td><p>the contract instance to undelete, in the format used in transactions </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
         <h2 id="BasicTypes.proto">BasicTypes.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -1551,14 +1439,14 @@
                 </tr>
               
                 <tr>
-                  <td>rbs</td>
+                  <td>rbh</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Ram byte seconds </p></td>
                 </tr>
               
                 <tr>
-                  <td>sbs</td>
+                  <td>sbh</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Storage byte seconds </p></td>
@@ -1818,6 +1706,13 @@
                   <td><a href="#bytes">bytes</a></td>
                   <td></td>
                   <td><p>The memo field of the node </p></td>
+                </tr>
+              
+                <tr>
+                  <td>RSA_PubKey</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>The RSA public key of the node. </p></td>
                 </tr>
               
             </tbody>
@@ -2121,7 +2016,7 @@
         
       
         <h3 id="proto.TopicID">TopicID</h3>
-        <p>The ID for a topic (used by the consensus sequencing service)</p>
+        <p>Unique identifier for a topic (used by the consensus service)</p>
 
         
           <table class="field-table">
@@ -2145,10 +2040,10 @@
                 </tr>
               
                 <tr>
-                  <td>accountNum</td>
+                  <td>topicNum</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>A nonnegative account number unique within its realm </p></td>
+                  <td><p>Unique topic identifier within a realm (nonnegative). </p></td>
                 </tr>
               
             </tbody>
@@ -2417,32 +2312,68 @@
               </tr>
             
               <tr>
-                <td>ConsensusCreateTopic</td>
+                <td>Freeze</td>
                 <td>31</td>
-                <td><p></p></td>
+                <td><p>freeze</p></td>
+              </tr>
+            
+              <tr>
+                <td>CreateTransactionRecord</td>
+                <td>32</td>
+                <td><p>Create Tx Record</p></td>
+              </tr>
+            
+              <tr>
+                <td>CryptoAccountAutoRenew</td>
+                <td>33</td>
+                <td><p>Crypto Auto Renew</p></td>
+              </tr>
+            
+              <tr>
+                <td>ContractAutoRenew</td>
+                <td>34</td>
+                <td><p>Contract Auto Renew</p></td>
+              </tr>
+            
+              <tr>
+                <td>getVersion</td>
+                <td>35</td>
+                <td><p>Get Version</p></td>
+              </tr>
+            
+              <tr>
+                <td>TransactionGetReceipt</td>
+                <td>36</td>
+                <td><p>Transaction Get Receipt</p></td>
+              </tr>
+            
+              <tr>
+                <td>ConsensusCreateTopic</td>
+                <td>50</td>
+                <td><p>New functionality in the HCS release</p></td>
               </tr>
             
               <tr>
                 <td>ConsensusUpdateTopic</td>
-                <td>32</td>
+                <td>51</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
                 <td>ConsensusDeleteTopic</td>
-                <td>33</td>
+                <td>52</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>ConsensusGetInfo</td>
-                <td>34</td>
+                <td>ConsensusGetTopicInfo</td>
+                <td>53</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
                 <td>ConsensusSubmitMessage</td>
-                <td>35</td>
+                <td>54</td>
                 <td><p></p></td>
               </tr>
             
@@ -2462,7 +2393,7 @@
 
       
         <h3 id="proto.ConsensusCreateTopicTransactionBody">ConsensusCreateTopicTransactionBody</h3>
-        <p></p>
+        <p>See [ConsensusService.createTopic()](#proto.ConsensusService)</p>
 
         
           <table class="field-table">
@@ -2472,24 +2403,46 @@
             <tbody>
               
                 <tr>
-                  <td>shardID</td>
-                  <td><a href="#proto.ShardID">ShardID</a></td>
+                  <td>memo</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Shard for this topic. </p></td>
+                  <td><p>Short publicly visible memo about the topic. No guarantee of uniqueness. </p></td>
                 </tr>
               
                 <tr>
-                  <td>realmID</td>
-                  <td><a href="#proto.RealmID">RealmID</a></td>
+                  <td>adminKey</td>
+                  <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Realm for the topic. </p></td>
+                  <td><p>Access control for update/delete of the topic.
+If unspecified, no access control is performed to extend the expirationTime of the topic via
+ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+not allowed. </p></td>
                 </tr>
               
                 <tr>
-                  <td>topicDefinition</td>
-                  <td><a href="#proto.ConsensusTopicDefinition">ConsensusTopicDefinition</a></td>
+                  <td>submitKey</td>
+                  <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>Access control for ConsensusService.submitMessage.
+If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed). </p></td>
+                </tr>
+              
+                <tr>
+                  <td>validStartTime</td>
+                  <td><a href="#proto.Timestamp">Timestamp</a></td>
+                  <td></td>
+                  <td><p>Effective timestamp at which submitMessage calls will begin to succeed on the topic.
+If unspecified, the consensus timestamp of this transaction will be the effective creationTime. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expirationTime</td>
+                  <td><a href="#proto.Timestamp">Timestamp</a></td>
+                  <td></td>
+                  <td><p>Effective timestamp at (and after) which submitMessage calls will no longer succeed on the topic.
+If unspecified, the consensus timestamp &#43; MAX_LIFETIME_SECONDS will become the effective expirationTime.
+The expirationTime may be no longer than MAX_LIFETIME_SECONDS from the consensus timestamp of this
+transaction. </p></td>
                 </tr>
               
             </tbody>
@@ -2514,7 +2467,7 @@
 
       
         <h3 id="proto.ConsensusDeleteTopicTransactionBody">ConsensusDeleteTopicTransactionBody</h3>
-        <p></p>
+        <p>See [ConsensusService.deleteTopic()](#proto.ConsensusService)</p>
 
         
           <table class="field-table">
@@ -2546,13 +2499,13 @@
     
       
       <div class="file-heading">
-        <h2 id="ConsensusGetInfo.proto">ConsensusGetInfo.proto</h2><a href="#title">Top</a>
+        <h2 id="ConsensusGetTopicInfo.proto">ConsensusGetTopicInfo.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
 
       
-        <h3 id="proto.ConsensusGetInfoQuery">ConsensusGetInfoQuery</h3>
-        <p>See [ConsensusService.getInfo()](#proto.ConsensusService)</p>
+        <h3 id="proto.ConsensusGetTopicInfoQuery">ConsensusGetTopicInfoQuery</h3>
+        <p>See [ConsensusService.getTopicInfo()](#proto.ConsensusService)</p>
 
         
           <table class="field-table">
@@ -2565,14 +2518,15 @@
                   <td>header</td>
                   <td><a href="#proto.QueryHeader">QueryHeader</a></td>
                   <td></td>
-                  <td><p>standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). </p></td>
+                  <td><p>Standard info sent from client to node, including the signed payment, and what kind of response is requested
+(cost, state proof, both, or neither). </p></td>
                 </tr>
               
                 <tr>
                   <td>topicID</td>
                   <td><a href="#proto.TopicID">TopicID</a></td>
                   <td></td>
-                  <td><p>Topic to retrieve info about (the running state of). </p></td>
+                  <td><p>Topic to retrieve info about (the parameters and running state of). </p></td>
                 </tr>
               
             </tbody>
@@ -2582,8 +2536,8 @@
 
         
       
-        <h3 id="proto.ConsensusGetInfoResponse">ConsensusGetInfoResponse</h3>
-        <p>Retrieve info about a consensus topic.</p>
+        <h3 id="proto.ConsensusGetTopicInfoResponse">ConsensusGetTopicInfoResponse</h3>
+        <p>Retrieve the parameters of and state of a consensus topic.</p>
 
         
           <table class="field-table">
@@ -2596,7 +2550,7 @@
                   <td>header</td>
                   <td><a href="#proto.ResponseHeader">ResponseHeader</a></td>
                   <td></td>
-                  <td><p>standard response from node to client, including the requested fields: cost, or state proof, or both, or neither </p></td>
+                  <td><p>Standard response from node to client, including the requested fields: cost, or state proof, or both, or neither. </p></td>
                 </tr>
               
                 <tr>
@@ -2610,14 +2564,14 @@
                   <td>topicDefinition</td>
                   <td><a href="#proto.ConsensusTopicDefinition">ConsensusTopicDefinition</a></td>
                   <td></td>
-                  <td><p>Topic definition. </p></td>
+                  <td><p>Topic definition, modified by createTopic/updateTopic/deleteTopic </p></td>
                 </tr>
               
                 <tr>
                   <td>topicState</td>
                   <td><a href="#proto.ConsensusTopicState">ConsensusTopicState</a></td>
                   <td></td>
-                  <td><p>Topic&#39;s consensus state. </p></td>
+                  <td><p>Topic&#39;s state as last modified by a submitMessage. </p></td>
                 </tr>
               
             </tbody>
@@ -2648,7 +2602,7 @@
 
       
         <h3 id="proto.ConsensusService">ConsensusService</h3>
-        <p>The Consensus Service provides the ability for Hedera Hashgraph to provide aBFT consensus as to the order and</p><p>validity of messages submitted to a *topic*, as well as a *consensus timestamp* for those messages.</p><p>Authorization of submitted messages is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [submitKey](#proto.Key).</p><p>Authorization for submitted messages is optional.</p><p>Authorization as to modification (_update/delete_) of the topic is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [adminKey](#proto.Key).</p><p>These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N</p><p>signatures required), contract evaluation, etc.</p><p>Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until date/time T.</p><p>A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.</p><p>Mirrornet consensus services may be used to subscribe to changes on the topic, including changes to the topic</p><p>definition and the consensus ordering and timestamp of submitted messages.</p>
+        <p>The Consensus Service provides the ability for Hedera Hashgraph to provide aBFT consensus as to the order and</p><p>validity of messages submitted to a *topic*, as well as a *consensus timestamp* for those messages.</p><p>Authorization of submitted messages is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [submitKey](#proto.Key).</p><p>Authorization for submitted messages is optional.</p><p>Authorization as to modification (_update/delete_) of the topic is based on the application of rules specified in the</p><p>[topic's](#proto.ConsensusTopicDefinition) [adminKey](#proto.Key).</p><p>These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N</p><p>signatures required), contract evaluation, etc.</p><p>Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until</p><p>date/time T.</p><p>The default expiration of a topic is 365 days (* 86400 seconds) from creation unless a sooner expiration is</p><p>specified for the default transaction fee.</p><p>A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.</p><p>Mirrornet consensus services may be used to subscribe to changes on the topic, including changes to the topic</p><p>definition and the consensus ordering and timestamp of submitted messages.</p>
         <table class="enum-table">
           <thead>
             <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
@@ -2675,18 +2629,18 @@ Request is [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTran
                 <td>deleteTopic</td>
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
-                <td><p>Mark a topic as deleted.
+                <td><p>Delete a topic. No more transactions on the topic are allowed.
 Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody)</p></td>
               </tr>
             
               <tr>
-                <td>getInfo</td>
+                <td>getTopicInfo</td>
                 <td><a href="#proto.Query">Query</a></td>
                 <td><a href="#proto.Response">Response</a></td>
-                <td><p>Retrieve information about a topic including the latest state (sequenceNumber and runningHash), and the topic&#39;s
-definition (valid message submission timespan, authorization rules, etc).
-Request is [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
-Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)</p></td>
+                <td><p>Retrieve the parameters of and state of a topic including the latest state (sequenceNumber and runningHash), and
+the topic&#39;s definition (valid message submission timespan, authorization rules, etc).
+Request is [ConsensusGetTopicInfoQuery](#proto.ConsensusGetTopicInfoQuery)
+Response is [ConsensusGetTopicInfoResponse](#proto.ConsensusGetTopicInfoResponse)</p></td>
               </tr>
             
               <tr>
@@ -2694,8 +2648,8 @@ Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)</p></td>
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Submit a message for consensus.
-Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and
-published (in order) to all subscribers (from the mirror net) on this topic.
+Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the
+mirror net, and published (in order) to all subscribers (from the mirror net) on this topic.
 Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody)</p></td>
               </tr>
             
@@ -2712,7 +2666,7 @@ Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessage
 
       
         <h3 id="proto.ConsensusSubmitMessageTransactionBody">ConsensusSubmitMessageTransactionBody</h3>
-        <p>TODO: 4000 bytes may be incorrect (too large).</p>
+        <p></p>
 
         
           <table class="field-table">
@@ -2732,7 +2686,7 @@ Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessage
                   <td>message</td>
                   <td><a href="#bytes">bytes</a></td>
                   <td></td>
-                  <td><p>Message to be submitted. Max size 4000 bytes. </p></td>
+                  <td><p>Message to be submitted. Max size of the Transaction (including signatures) is 4kB. </p></td>
                 </tr>
               
             </tbody>
@@ -2757,7 +2711,7 @@ Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessage
 
       
         <h3 id="proto.ConsensusTopicDefinition">ConsensusTopicDefinition</h3>
-        <p>Metadata about the topic that is defined on creation and modified via enforcement of rules specified by the adminKey.</p>
+        <p>Parameters of the topic which are modifiable by the rules specified in the adminKey.</p>
 
         
           <table class="field-table">
@@ -2770,11 +2724,11 @@ Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessage
                   <td>memo</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Short non-unique, publicly visible memo about the topic. </p></td>
+                  <td><p>Short publicly visible memo about the topic. No guarantee of uniqueness. </p></td>
                 </tr>
               
                 <tr>
-                  <td>creationTime</td>
+                  <td>validStartTime</td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
                   <td><p>When the topic should become available to receive messages via ConsensusService.submitMessage().
@@ -2787,24 +2741,25 @@ If unspecified, no creation timestamp is used. </p></td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
                   <td><p>When the topic should cease availability to receive messages via ConsensusService.submitMessage().
-The topic will not accept submitMessage() requests from this timestamp forward.
-If unspecified, no expiration timestamp is used.
-
-When the topic should cease accepting transactions. </p></td>
+The topic will not accept submitMessage() requests from this timestamp forward. </p></td>
                 </tr>
               
                 <tr>
                   <td>adminKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can change/delete this topic. Defaults to requester if unspecified on create. </p></td>
+                  <td><p>Access control for update/delete of the topic.
+If unspecified, no access control is performed to extend the expirationTime of the topic via
+ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+not allowed. </p></td>
                 </tr>
               
                 <tr>
                   <td>submitKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can submitMessage (empty means anyone can). Defaults to allowing anyone to submit. </p></td>
+                  <td><p>Access control for ConsensusService.submitMessage.
+If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed). </p></td>
                 </tr>
               
             </tbody>
@@ -2842,14 +2797,24 @@ When the topic should cease accepting transactions. </p></td>
                   <td>sequenceNumber</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>Starts at 0 for first submitted message. Incremented on each submitted message. </p></td>
+                  <td><p>Starts at 1 for first submitted message. Incremented on each submitted message. </p></td>
                 </tr>
               
                 <tr>
                   <td>runningHash</td>
                   <td><a href="#bytes">bytes</a></td>
                   <td></td>
-                  <td><p>Running hash of every (message, sequenceNumber, topicID) tuple in this topic. </p></td>
+                  <td><p>Running hash (SHA384) of every message.
+Initially the runningHash is empty.
+Subsequent messages update the running hash to SHA384(previousRunningHash, topicID, consensusTimestamp,
+sequenceNumber, message) </p></td>
+                </tr>
+              
+                <tr>
+                  <td>consensusTimestamp</td>
+                  <td><a href="#proto.Timestamp">Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -2874,7 +2839,7 @@ When the topic should cease accepting transactions. </p></td>
 
       
         <h3 id="proto.ConsensusUpdateTopicTransactionBody">ConsensusUpdateTopicTransactionBody</h3>
-        <p></p>
+        <p>See [ConsensusService.updateTopic()](#proto.ConsensusService)</p>
 
         
           <table class="field-table">
@@ -2892,37 +2857,46 @@ When the topic should cease accepting transactions. </p></td>
               
                 <tr>
                   <td>memo</td>
-                  <td><a href="#string">string</a></td>
+                  <td><a href="#google.protobuf.StringValue">google.protobuf.StringValue</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>Short publicly visible memo about the topic. No guarantee of uniqueness. Null for &#34;do not update&#34;. </p></td>
                 </tr>
               
                 <tr>
-                  <td>creationTime</td>
+                  <td>validStartTime</td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>Effective timestamp at which submitMessage calls will begin to succeed on the topic.
+If unspecified, the validStartTime of this topic will remain unchanged. </p></td>
                 </tr>
               
                 <tr>
                   <td>expirationTime</td>
                   <td><a href="#proto.Timestamp">Timestamp</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>Effective timestamp at which submitMessage calls will no longer succeed on the topic.
+If unspecified, the expirationTime of the topic will remain unchanged.
+If specified, the topic&#39;s lifetime may not be extended past MAX_LIFETIME_SECONDS from now (internal system config) </p></td>
                 </tr>
               
                 <tr>
                   <td>adminKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can change/delete this topic </p></td>
+                  <td><p>Access control for update/delete of the topic.
+If unspecified, no change.
+If empty key - no access control is performed to extend the expirationTime of the topic via
+ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+not allowed. </p></td>
                 </tr>
               
                 <tr>
                   <td>submitKey</td>
                   <td><a href="#proto.Key">Key</a></td>
                   <td></td>
-                  <td><p>Who can submitMessage (empty means anyone can). </p></td>
+                  <td><p>Access control for ConsensusService.submitMessage.
+If unspecified, no change.
+If empty key - no access control is performed on ConsensusService.submitMessage (all submissions are allowed). </p></td>
                 </tr>
               
             </tbody>
@@ -3006,7 +2980,7 @@ When the topic should cease accepting transactions. </p></td>
 
       
         <h3 id="proto.ContractCallLocalQuery">ContractCallLocalQuery</h3>
-        <p>Call a function of the given smart contract instance, giving it functionParameters as its inputs. It can use the given amount of gas, and any unspent gas will be refunded to the paying account.</p><p>This is performed locally on the particular node that the client is communicating with. It cannot change the state of the contract instance (and so, cannot spend anything from the instance's cryptocurrency account). It will not have a consensus timestamp. It cannot generate a record or a receipt. The response will contain the output returned by the function call.  This is useful for calling getter functions, which purely read the state and don't change it. It is faster and cheaper than a normal call, because it is purely local to a single  node.</p>
+        <p>Call a function of the given smart contract instance, giving it functionParameters as its inputs. It will consume the entire given amount of gas.</p><p>This is performed locally on the particular node that the client is communicating with. It cannot change the state of the contract instance (and so, cannot spend anything from the instance's cryptocurrency account). It will not have a consensus timestamp. It cannot generate a record or a receipt. The response will contain the output returned by the function call.  This is useful for calling getter functions, which purely read the state and don't change it. It is faster and cheaper than a normal call, because it is purely local to a single  node.</p>
 
         
           <table class="field-table">
@@ -3019,7 +2993,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>header</td>
                   <td><a href="#proto.QueryHeader">QueryHeader</a></td>
                   <td></td>
-                  <td><p>standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). </p></td>
+                  <td><p>standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). The payment must cover the fees and all of the gas offered. </p></td>
                 </tr>
               
                 <tr>
@@ -3033,7 +3007,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>gas</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>the amount of gas to use for the call </p></td>
+                  <td><p>the amount of gas to use for the call. All of the gas offered will be charged for. </p></td>
                 </tr>
               
                 <tr>
@@ -3570,6 +3544,13 @@ When the topic should cease accepting transactions. </p></td>
                   <td><p>the memo associated with the contract (max 100 bytes) </p></td>
                 </tr>
               
+                <tr>
+                  <td>balance</td>
+                  <td><a href="#uint64">uint64</a></td>
+                  <td></td>
+                  <td><p>The current balance, in tinybars </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -3731,51 +3712,6 @@ When the topic should cease accepting transactions. </p></td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>The memo associated with the contract (max 100 bytes) </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
-        <h2 id="CreateFeeSchedule.proto">CreateFeeSchedule.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="proto.CreateFeeScheduleTransactionBody">CreateFeeScheduleTransactionBody</h3>
-        <p>The transaction body to update the fee schedule.</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>key</td>
-                  <td><a href="#proto.Key">Key</a></td>
-                  <td></td>
-                  <td><p>The key that must sign to update the Fee Schedule </p></td>
-                </tr>
-              
-                <tr>
-                  <td>transactionFeeSchedule</td>
-                  <td><a href="#proto.TransactionFeeSchedule">TransactionFeeSchedule</a></td>
-                  <td>repeated</td>
-                  <td><p>The fee schedule for a specific hedera functionality and the time period this fee will be valid for the transaction </p></td>
                 </tr>
               
             </tbody>
@@ -4093,6 +4029,13 @@ When the topic should cease accepting transactions. </p></td>
                 <tr>
                   <td>accountID</td>
                   <td><a href="#proto.AccountID">AccountID</a></td>
+                  <td></td>
+                  <td><p>The account ID for which information is requested </p></td>
+                </tr>
+              
+                <tr>
+                  <td>contractID</td>
+                  <td><a href="#proto.ContractID">ContractID</a></td>
                   <td></td>
                   <td><p>The account ID for which information is requested </p></td>
                 </tr>
@@ -5660,6 +5603,98 @@ When the topic should cease accepting transactions. </p></td>
     
       
       <div class="file-heading">
+        <h2 id="Freeze.proto">Freeze.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="proto.FreezeTransactionBody">FreezeTransactionBody</h3>
+        <p>Set the freezing period in which the platform will stop creating events and accepting transactions. This is used before safely shut down the platform for maintenance.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>startHour</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The start hour (in UTC time), a value between 0 and 23 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>startMin</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The start minute (in UTC time), a value between 0 and 59 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>endHour</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The end hour (in UTC time), a value between 0 and 23 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>endMin</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The end minute (in UTC time), a value between 0 and 59 </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="FreezeService.proto">FreezeService.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+
+      
+        <h3 id="proto.FreezeService">FreezeService</h3>
+        <p>The request and responses for freeze service.</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>freeze</td>
+                <td><a href="#proto.Transaction">Transaction</a></td>
+                <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
+                <td><p>Freezes the nodes by submitting the transaction. The grpc server returns the TransactionResponse</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
         <h2 id="GetByKey.proto">GetByKey.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -5999,10 +6034,10 @@ When the topic should cease accepting transactions. </p></td>
                 </tr>
               
                 <tr>
-                  <td>consensusGetInfo</td>
-                  <td><a href="#proto.ConsensusGetInfoQuery">ConsensusGetInfoQuery</a></td>
+                  <td>consensusGetTopicInfo</td>
+                  <td><a href="#proto.ConsensusGetTopicInfoQuery">ConsensusGetTopicInfoQuery</a></td>
                   <td></td>
-                  <td><p>Get info about a consensus topic. </p></td>
+                  <td><p>Get the parameters of and state of a consensus topic. </p></td>
                 </tr>
               
             </tbody>
@@ -6229,10 +6264,10 @@ When the topic should cease accepting transactions. </p></td>
                 </tr>
               
                 <tr>
-                  <td>consensusGetInfo</td>
-                  <td><a href="#proto.ConsensusGetInfoResponse">ConsensusGetInfoResponse</a></td>
+                  <td>consensusGetTopicInfo</td>
+                  <td><a href="#proto.ConsensusGetTopicInfoResponse">ConsensusGetTopicInfoResponse</a></td>
                   <td></td>
-                  <td><p>Info about a consensus topic. </p></td>
+                  <td><p>Parameters of and state of a consensus topic.. </p></td>
                 </tr>
               
             </tbody>
@@ -6801,33 +6836,195 @@ When the topic should cease accepting transactions. </p></td>
               </tr>
             
               <tr>
-                <td>INVALID_TOPIC_ID</td>
+                <td>PAYER_ACCOUNT_UNAUTHORIZED</td>
                 <td>89</td>
+                <td><p>The fee payer account doesn&#39;t have permission to submit such Transaction</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_FREEZE_TRANSACTION_BODY</td>
+                <td>90</td>
+                <td><p>FreezeTransactionBody is invalid</p></td>
+              </tr>
+            
+              <tr>
+                <td>FREEZE_TRANSACTION_BODY_NOT_FOUND</td>
+                <td>91</td>
+                <td><p>FreezeTransactionBody does not exist</p></td>
+              </tr>
+            
+              <tr>
+                <td>TRANSFER_LIST_SIZE_LIMIT_EXCEEDED</td>
+                <td>92</td>
+                <td><p>Exceeded the number of accounts (both from and to) allowed for crypto transfer list</p></td>
+              </tr>
+            
+              <tr>
+                <td>RESULT_SIZE_LIMIT_EXCEEDED</td>
+                <td>93</td>
+                <td><p>Smart contract result size greater than specified maxResultSize</p></td>
+              </tr>
+            
+              <tr>
+                <td>NOT_SPECIAL_ACCOUNT</td>
+                <td>94</td>
+                <td><p>The payer account is not a special account(account 0.0.55)</p></td>
+              </tr>
+            
+              <tr>
+                <td>CONTRACT_NEGATIVE_GAS</td>
+                <td>95</td>
+                <td><p>Negative gas was offered in smart contract call</p></td>
+              </tr>
+            
+              <tr>
+                <td>CONTRACT_NEGATIVE_VALUE</td>
+                <td>96</td>
+                <td><p>Negative value / initial balance was specified in a smart contract call / create</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_FEE_FILE</td>
+                <td>97</td>
+                <td><p>Failed to update fee file</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_EXCHANGE_RATE_FILE</td>
+                <td>98</td>
+                <td><p>Failed to update exchange rate file</p></td>
+              </tr>
+            
+              <tr>
+                <td>INSUFFICIENT_LOCAL_CALL_GAS</td>
+                <td>99</td>
+                <td><p>Payment tendered for contract local call cannot cover both the fee and the gas</p></td>
+              </tr>
+            
+              <tr>
+                <td>ENTITY_NOT_ALLOWED_TO_DELETE</td>
+                <td>100</td>
+                <td><p>Entities with Entity ID below 1000 are not allowed to be deleted</p></td>
+              </tr>
+            
+              <tr>
+                <td>AUTHORIZATION_FAILED</td>
+                <td>101</td>
+                <td><p>Violating one of these rules: 1) treasury account can update all entities below 0.0.1000, 2) account 0.0.50 can update all entities from 0.0.51 - 0.0.80, 3) Network Function Master Account A/c 0.0.50 - Update all Network Function accounts &amp; perform all the Network Functions listed below, 4) Network Function Accounts: i) A/c 0.0.55 - Update Address Book files (0.0.101/102), ii) A/c 0.0.56 - Update Fee schedule (0.0.111), iii) A/c 0.0.57 - Update Exchange Rate (0.0.112).</p></td>
+              </tr>
+            
+              <tr>
+                <td>FILE_UPLOADED_PROTO_INVALID</td>
+                <td>102</td>
+                <td><p>Fee Schedule Proto uploaded but not valid (append or update is required)</p></td>
+              </tr>
+            
+              <tr>
+                <td>FILE_UPLOADED_PROTO_NOT_SAVED_TO_DISK</td>
+                <td>103</td>
+                <td><p>Fee Schedule Proto uploaded but not valid (append or update is required)</p></td>
+              </tr>
+            
+              <tr>
+                <td>FEE_SCHEDULE_FILE_PART_UPLOADED</td>
+                <td>104</td>
+                <td><p>Fee Schedule Proto File Part uploaded</p></td>
+              </tr>
+            
+              <tr>
+                <td>EXCHANGE_RATE_CHANGE_LIMIT_EXCEEDED</td>
+                <td>105</td>
+                <td><p>The change on Exchange Rate exceeds Exchange_Rate_Allowed_Percentage</p></td>
+              </tr>
+            
+              <tr>
+                <td>MAX_CONTRACT_STORAGE_EXCEEDED</td>
+                <td>106</td>
+                <td><p>Contract permanent storage exceeded the currently allowable limit</p></td>
+              </tr>
+            
+              <tr>
+                <td>TRANSAFER_ACCOUNT_SAME_AS_DELETE_ACCOUNT</td>
+                <td>107</td>
+                <td><p>Transfer Account should not be same as Account to be deleted</p></td>
+              </tr>
+            
+              <tr>
+                <td>TOTAL_LEDGER_BALANCE_INVALID</td>
+                <td>108</td>
                 <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>EXPIRATION_REDUCTION_NOT_ALLOWED</td>
+                <td>110</td>
+                <td><p>The expiration date/time on a smart contract may not be reduced</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_TOPIC_ID</td>
+                <td>150</td>
+                <td><p>HCS release below this point
+
+The Topic ID specified is not in the system.</p></td>
               </tr>
             
               <tr>
                 <td>TOPIC_DELETED</td>
-                <td>90</td>
-                <td><p></p></td>
+                <td>151</td>
+                <td><p>The Topic referenced is in a deleted state for a period of time pending removal from the system.
+No ConsensusService transactions on this topic will succeed once the topic is deleted, though getTopicInfo()
+may return the topic&#39;s state.</p></td>
               </tr>
             
               <tr>
                 <td>MESSAGE_TOO_LONG</td>
-                <td>91</td>
+                <td>152</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>TOPIC_NOT_YET_ENABLED</td>
-                <td>92</td>
+                <td>TOPIC_NOT_ENABLED</td>
+                <td>153</td>
+                <td><p>An attempted ConsensusService.submitMessage failed due to being called outside the valid time period for the
+topic, defined by the topic&#39;s creationTimestamp and expirationTimestamp. All other operations on the topic
+will succeed.</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_TOPIC_VALID_START_TIME</td>
+                <td>154</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>TOPIC_EXPIRED</td>
-                <td>93</td>
+                <td>INVALID_TOPIC_EXPIRATION_TIME</td>
+                <td>155</td>
                 <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_TOPIC_ADMIN_KEY</td>
+                <td>156</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_TOPIC_SUBMIT_KEY</td>
+                <td>157</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>UNAUTHORIZED</td>
+                <td>158</td>
+                <td><p>An attempted ConsensusService operation failed due to missing/insufficient signatures.</p></td>
+              </tr>
+            
+              <tr>
+                <td>INVALID_TOPIC_MESSAGE</td>
+                <td>159</td>
+                <td><p>A ConsensusService message is empty.</p></td>
               </tr>
             
           </tbody>
@@ -6873,7 +7070,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>cost</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>The fee that would be charged to get the requested information (if a cost was requested) </p></td>
+                  <td><p>The fee that would be charged to get the requested information (if a cost was requested). Note: This cost only includes the query fee and does not include the transfer fee(which is required to execute the transfer transaction to debit the payer account and credit the node account with query fee) </p></td>
                 </tr>
               
                 <tr>
@@ -6979,6 +7176,20 @@ When the topic should cease accepting transactions. </p></td>
                 <td><a href="#proto.Transaction">Transaction</a></td>
                 <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
                 <td><p>Delete a contract instance(mark as deleted until it expires), and transfer hbars to the specified account. The grpc server returns the TransactionResponse</p></td>
+              </tr>
+            
+              <tr>
+                <td>systemDelete</td>
+                <td><a href="#proto.Transaction">Transaction</a></td>
+                <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
+                <td><p>Deletes a smart contract by submitting the transaction when the account has admin privileges on the file. The grpc server returns the TransactionResponse</p></td>
+              </tr>
+            
+              <tr>
+                <td>systemUndelete</td>
+                <td><a href="#proto.Transaction">Transaction</a></td>
+                <td><a href="#proto.TransactionResponse">TransactionResponse</a></td>
+                <td><p>UnDeletes a smart contract by submitting the transaction when the account has admin privileges on the file. The grpc server returns the TransactionResponse</p></td>
               </tr>
             
           </tbody>
@@ -7272,7 +7483,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>transactionFee</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>The fee the client pays, which is split between the network and the node </p></td>
+                  <td><p>The maximum transaction fee the client is willing to pay, which is split between the network and the node </p></td>
                 </tr>
               
                 <tr>
@@ -7409,6 +7620,13 @@ When the topic should cease accepting transactions. </p></td>
                 </tr>
               
                 <tr>
+                  <td>freeze</td>
+                  <td><a href="#proto.FreezeTransactionBody">FreezeTransactionBody</a></td>
+                  <td></td>
+                  <td><p>Freeze the nodes </p></td>
+                </tr>
+              
+                <tr>
                   <td>consensusCreateTopic</td>
                   <td><a href="#proto.ConsensusCreateTopicTransactionBody">ConsensusCreateTopicTransactionBody</a></td>
                   <td></td>
@@ -7439,6 +7657,27 @@ When the topic should cease accepting transactions. </p></td>
             </tbody>
           </table>
 
+          
+            
+            
+            <h4>Fields with deprecated option</h4>
+            <table>
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Option</td>
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr>
+                  <td>generateRecord</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+              </tbody>
+            </table>
+            
           
 
         
@@ -7730,6 +7969,27 @@ When the topic should cease accepting transactions. </p></td>
                   <td><p>exchange rate set of Hbar to cents (USD) </p></td>
                 </tr>
               
+                <tr>
+                  <td>topicID</td>
+                  <td><a href="#proto.TopicID">TopicID</a></td>
+                  <td></td>
+                  <td><p>TopicID of a newly created consensus service topic </p></td>
+                </tr>
+              
+                <tr>
+                  <td>topicSequenceNumber</td>
+                  <td><a href="#uint64">uint64</a></td>
+                  <td></td>
+                  <td><p>Updated sequence number for a consensus service topic. The result of a ConsensusSubmitMessage. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>topicRunningHash</td>
+                  <td><a href="#bytes">bytes</a></td>
+                  <td></td>
+                  <td><p>Updated running hash for a consensus service topic. The result of a ConsensusSubmitMessage. </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -7800,7 +8060,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>transactionFee</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>The transaction fee in the transaction </p></td>
+                  <td><p>The actual transaction fee charged, not the original transactionFee value from TransactionBody </p></td>
                 </tr>
               
                 <tr>
@@ -7821,7 +8081,7 @@ When the topic should cease accepting transactions. </p></td>
                   <td>transferList</td>
                   <td><a href="#proto.TransferList">TransferList</a></td>
                   <td></td>
-                  <td><p>Record of results of a CryptoTransferTransaction </p></td>
+                  <td><p>All hbar transfers as a result of this transaction, such as fees, or transfers performed by the transaction, or by a smart contract it calls, or by the creation of threshold records that it triggers. </p></td>
                 </tr>
               
             </tbody>
@@ -7846,7 +8106,7 @@ When the topic should cease accepting transactions. </p></td>
 
       
         <h3 id="proto.TransactionResponse">TransactionResponse</h3>
-        <p>When the client sends the node a transaction of any kind, the node replies with this, which simply says that the transaction passed the precheck (so the node will submit it to the network) or it failed (so it won't). To learn the consensus result, the client should later obtain a receipt (free), or can buy a more detailed record (not free).</p>
+        <p>When the client sends the node a transaction of any kind, the node replies with this, which simply says that the transaction passed the precheck (so the node will submit it to the network) or it failed (so it won't). If the fee offered was insufficient, this will also contain the amount of the required fee. To learn the consensus result, the client should later obtain a receipt (free), or can buy a more detailed record (not free).</p>
 
         
           <table class="field-table">
@@ -7860,6 +8120,13 @@ When the topic should cease accepting transactions. </p></td>
                   <td><a href="#proto.ResponseCodeEnum">ResponseCodeEnum</a></td>
                   <td></td>
                   <td><p>The response code that indicates the current status of the transaction. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cost</td>
+                  <td><a href="#uint64">uint64</a></td>
+                  <td></td>
+                  <td><p>If the response code was INSUFFICIENT_TX_FEE, the actual transaction fee that would be required to execute the transaction. </p></td>
                 </tr>
               
             </tbody>
