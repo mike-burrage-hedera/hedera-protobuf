@@ -26,7 +26,7 @@ import "TransactionGetReceipt.proto";
 import "TransactionGetRecord.proto";
 import "TransactionGetFastRecord.proto";
 
-import "ConsensusGetInfo.proto";
+import "ConsensusGetTopicInfo.proto";
 
 /* A single query, which is sent from the client to the node. This includes all possible queries. Each Query should not have more than 50 levels. */
 message Query {
@@ -51,6 +51,6 @@ message Query {
         TransactionGetRecordQuery transactionGetRecord = 15; // Get a record for a transaction (lasts 1 hour)
         TransactionGetFastRecordQuery transactionGetFastRecord = 16; // Get a record for a transaction (lasts 180 seconds)
 
-        ConsensusGetInfoQuery consensusGetInfo = 17; // Get info about a consensus topic.
+        ConsensusGetTopicInfoQuery consensusGetTopicInfo = 50; // Get the parameters of and state of a consensus topic.
     }
 }

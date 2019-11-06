@@ -6,10 +6,33 @@ option java_package = "com.hederahashgraph.api.proto.java";
 option java_multiple_files = true;
 
 import "BasicTypes.proto";
-import "ConsensusTopicDefinition.proto";
+import "Duration.proto";
+import "Timestamp.proto";
 
+// See [ConsensusService.createTopic()](#proto.ConsensusService)
 message ConsensusCreateTopicTransactionBody {
-    ShardID shardID = 1; // Shard for this topic.
-    RealmID realmID = 2; // Realm for the topic.
-    ConsensusTopicDefinition topicDefinition = 3;
+    string memo = 1; // Short publicly visible memo about the topic. No guarantee of uniqueness.
+
+    /* Access control for update/delete of the topic.
+     * If unspecified, no access control is performed to extend the expirationTime of the topic via
+     * ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+     * not allowed.
+     */
+    Key adminKey = 2;
+    /* Access control for ConsensusService.submitMessage.
+     * If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed).
+     */
+    Key submitKey = 3;
+
+    /* Effective timestamp at which submitMessage calls will begin to succeed on the topic.
+     * If unspecified, the consensus timestamp of this transaction will be the effective creationTime.
+     */
+    Timestamp validStartTime = 4;
+
+    /* Effective timestamp at (and after) which submitMessage calls will no longer succeed on the topic.
+     * If unspecified, the consensus timestamp + MAX_LIFETIME_SECONDS will become the effective expirationTime.
+     * The expirationTime may be no longer than MAX_LIFETIME_SECONDS from the consensus timestamp of this
+     * transaction.
+     */
+    Timestamp expirationTime = 5;
 }

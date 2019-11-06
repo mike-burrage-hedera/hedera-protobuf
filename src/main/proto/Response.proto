@@ -26,7 +26,7 @@ import "TransactionGetReceipt.proto";
 import "TransactionGetRecord.proto";
 import "TransactionGetFastRecord.proto";
 
-import "ConsensusGetInfo.proto";
+import "ConsensusGetTopicInfo.proto";
 
 /* A single response, which is returned from the node to the client, after the client sent the node a query. This includes all responses. */
 message Response {
@@ -52,6 +52,6 @@ message Response {
         TransactionGetRecordResponse transactionGetRecord = 15; // Get a record for a transaction (lasts 1 hour)
         TransactionGetFastRecordResponse transactionGetFastRecord = 16; // Get a record for a transaction (lasts 180 seconds)
 
-        ConsensusGetInfoResponse consensusGetInfo = 17; // Info about a consensus topic.
+        ConsensusGetTopicInfoResponse consensusGetTopicInfo = 17; // Parameters of and state of a consensus topic..
     }
 }

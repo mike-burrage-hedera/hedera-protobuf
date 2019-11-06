@@ -8,17 +8,24 @@ option java_multiple_files = true;
 import "BasicTypes.proto";
 import "Timestamp.proto";
 
-// Metadata about the topic that is defined on creation and modified via enforcement of rules specified by the adminKey.
+// Parameters of the topic which are modifiable by the rules specified in the adminKey.
 message ConsensusTopicDefinition {
-    string memo = 1; // Short non-unique, publicly visible memo about the topic.
+    string memo = 1; // Short publicly visible memo about the topic. No guarantee of uniqueness.
     // When the topic should become available to receive messages via ConsensusService.submitMessage().
     // The topic will not accept submitMessage() requests _before_ this timestamp.
     // If unspecified, no creation timestamp is used.
-    Timestamp creationTime = 2;
+    Timestamp validStartTime = 2;
     // When the topic should cease availability to receive messages via ConsensusService.submitMessage().
     // The topic will not accept submitMessage() requests from this timestamp forward.
-    // If unspecified, no expiration timestamp is used.
-    Timestamp expirationTime = 3; // When the topic should cease accepting transactions.
-    Key adminKey = 4; // Who can change/delete this topic. Defaults to requester if unspecified on create.
-    Key submitKey = 5; // Who can submitMessage (empty means anyone can). Defaults to allowing anyone to submit.
+    Timestamp expirationTime = 3;
+    /* Access control for update/delete of the topic.
+     * If unspecified, no access control is performed to extend the expirationTime of the topic via
+     * ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+     * not allowed.
+     */
+    Key adminKey = 4;
+    /* Access control for ConsensusService.submitMessage.
+     * If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed).
+     */
+    Key submitKey = 5;
 }

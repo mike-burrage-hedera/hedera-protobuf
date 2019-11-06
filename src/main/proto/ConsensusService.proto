@@ -23,13 +23,17 @@ import "Transaction.proto";
  * These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N
  * signatures required), contract evaluation, etc.
  *
- * Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until date/time T.
+ * Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until
+ * date/time T.
+ *
+ * The default expiration of a topic is 365 days (* 86400 seconds) from creation unless a sooner expiration is
+ * specified for the default transaction fee.
  *
  * A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.
  *
  * Mirrornet consensus services may be used to subscribe to changes on the topic, including changes to the topic
  * definition and the consensus ordering and timestamp of submitted messages.
-*/
+ */
 service ConsensusService {
     /* Create a topic to be used for consensus.
      * Request is [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody)
@@ -41,21 +45,21 @@ service ConsensusService {
      */
     rpc updateTopic (Transaction) returns (TransactionResponse);
 
-    /* Mark a topic as deleted.
+    /* Delete a topic. No more transactions on the topic are allowed.
      * Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody)
      */
     rpc deleteTopic (Transaction) returns (TransactionResponse);
 
-    /* Retrieve information about a topic including the latest state (sequenceNumber and runningHash), and the topic's
-     * definition (valid message submission timespan, authorization rules, etc).
-     * Request is [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
-     * Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)
+    /* Retrieve the parameters of and state of a topic including the latest state (sequenceNumber and runningHash), and
+     * the topic's definition (valid message submission timespan, authorization rules, etc).
+     * Request is [ConsensusGetTopicInfoQuery](#proto.ConsensusGetTopicInfoQuery)
+     * Response is [ConsensusGetTopicInfoResponse](#proto.ConsensusGetTopicInfoResponse)
      */
-    rpc getInfo (Query) returns (Response);
+    rpc getTopicInfo (Query) returns (Response);
 
     /* Submit a message for consensus.
-     * Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and
-     * published (in order) to all subscribers (from the mirror net) on this topic.
+     * Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the
+     * mirror net, and published (in order) to all subscribers (from the mirror net) on this topic.
      * Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody)
      */
     rpc submitMessage (Transaction) returns (TransactionResponse);

@@ -5,14 +5,40 @@ package proto;
 option java_package = "com.hederahashgraph.api.proto.java";
 option java_multiple_files = true;
 
+import "google/protobuf/wrappers.proto";
 import "BasicTypes.proto";
+import "Duration.proto";
 import "Timestamp.proto";
 
+// See [ConsensusService.updateTopic()](#proto.ConsensusService)
 message ConsensusUpdateTopicTransactionBody {
     TopicID topicID = 1;
-    string memo = 2;
-    Timestamp creationTime = 3;
+
+    // Short publicly visible memo about the topic. No guarantee of uniqueness. Null for "do not update".
+    google.protobuf.StringValue memo = 2;
+
+    /* Effective timestamp at which submitMessage calls will begin to succeed on the topic.
+     * If unspecified, the validStartTime of this topic will remain unchanged.
+     */
+    Timestamp validStartTime = 3;
+
+    /* Effective timestamp at which submitMessage calls will no longer succeed on the topic.
+     * If unspecified, the expirationTime of the topic will remain unchanged.
+     * If specified, the topic's lifetime may not be extended past MAX_LIFETIME_SECONDS from now (internal system config)
+     */
     Timestamp expirationTime = 4;
-    Key adminKey = 5; // Who can change/delete this topic
-    Key submitKey = 6; // Who can submitMessage (empty means anyone can).
+
+    /* Access control for update/delete of the topic.
+     * If unspecified, no change.
+     * If empty key - no access control is performed to extend the expirationTime of the topic via
+     * ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is
+     * not allowed.
+     */
+    Key adminKey = 6;
+
+    /* Access control for ConsensusService.submitMessage.
+     * If unspecified, no change.
+     * If empty key - no access control is performed on ConsensusService.submitMessage (all submissions are allowed).
+     */
+    Key submitKey = 7;
 }

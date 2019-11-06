@@ -3,20 +3,6 @@
 
 ## Table of Contents
 
-- [AdminDelete.proto](#AdminDelete.proto)
-    - [AdminDeleteTransactionBody](#proto.AdminDeleteTransactionBody)
-  
-  
-  
-  
-
-- [AdminUndelete.proto](#AdminUndelete.proto)
-    - [AdminUndeleteTransactionBody](#proto.AdminUndeleteTransactionBody)
-  
-  
-  
-  
-
 - [BasicTypes.proto](#BasicTypes.proto)
     - [AccountID](#proto.AccountID)
     - [ContractID](#proto.ContractID)
@@ -60,9 +46,9 @@
   
   
 
-- [ConsensusGetInfo.proto](#ConsensusGetInfo.proto)
-    - [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery)
-    - [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse)
+- [ConsensusGetTopicInfo.proto](#ConsensusGetTopicInfo.proto)
+    - [ConsensusGetTopicInfoQuery](#proto.ConsensusGetTopicInfoQuery)
+    - [ConsensusGetTopicInfoResponse](#proto.ConsensusGetTopicInfoResponse)
   
   
   
@@ -161,13 +147,6 @@
 
 - [ContractUpdate.proto](#ContractUpdate.proto)
     - [ContractUpdateTransactionBody](#proto.ContractUpdateTransactionBody)
-  
-  
-  
-  
-
-- [CreateFeeSchedule.proto](#CreateFeeSchedule.proto)
-    - [CreateFeeScheduleTransactionBody](#proto.CreateFeeScheduleTransactionBody)
   
   
   
@@ -336,6 +315,20 @@
   
   
 
+- [Freeze.proto](#Freeze.proto)
+    - [FreezeTransactionBody](#proto.FreezeTransactionBody)
+  
+  
+  
+  
+
+- [FreezeService.proto](#FreezeService.proto)
+  
+  
+  
+    - [FreezeService](#proto.FreezeService)
+  
+
 - [GetByKey.proto](#GetByKey.proto)
     - [EntityID](#proto.EntityID)
     - [GetByKeyQuery](#proto.GetByKeyQuery)
@@ -481,71 +474,6 @@
 
 
 
-<a name="AdminDelete.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## AdminDelete.proto
-
-
-
-<a name="proto.AdminDeleteTransactionBody"></a>
-
-### AdminDeleteTransactionBody
-Delete a file or smart contract - can only be done with a Hedera admin multisig. When it is deleted, it immediately disappears from the system as seen by the user, but is still stored internally until the expiration time, at which time it is truly and permanently deleted. Until that time, it can be undeleted by the Hedera admin multisig. When a smart contract is deleted, the cryptocurrency account within it continues to exist, and is not affected by the expiration time here.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| fileID | [FileID](#proto.FileID) |  | the file to delete, in the format used in transactions |
-| contractID | [ContractID](#proto.ContractID) |  | the contract instance to delete, in the format used in transactions |
-| expirationTime | [TimestampSeconds](#proto.TimestampSeconds) |  | the time at which the &#34;deleted&#34; file should truly be permanently deleted |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="AdminUndelete.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## AdminUndelete.proto
-
-
-
-<a name="proto.AdminUndeleteTransactionBody"></a>
-
-### AdminUndeleteTransactionBody
-Undelete a file or smart contract that was deleted by AdminDelete - can only be done with a Hedera admin multisig. When it is deleted, it immediately disappears from the system as seen by the user, but is still stored internally until the expiration time, at which time it is truly and permanently deleted. Until that time, it can be undeleted by the Hedera admin multisig. When a smart contract is deleted, the cryptocurrency account within it continues to exist, and is not affected by the expiration time here.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| fileID | [FileID](#proto.FileID) |  | the file to undelete, in the format used in transactions |
-| contractID | [ContractID](#proto.ContractID) |  | the contract instance to undelete, in the format used in transactions |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
 <a name="BasicTypes.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -616,8 +544,8 @@ This contains two Fee Schedules with expiry timestamp.
 | constant | [int64](#int64) |  | A constant determined by the business to calculate the fees |
 | bpt | [int64](#int64) |  | Bytes per transaction |
 | vpt | [int64](#int64) |  | Verifications per transaction |
-| rbs | [int64](#int64) |  | Ram byte seconds |
-| sbs | [int64](#int64) |  | Storage byte seconds |
+| rbh | [int64](#int64) |  | Ram byte seconds |
+| sbh | [int64](#int64) |  | Storage byte seconds |
 | gas | [int64](#int64) |  | Gas for the contract execution |
 | tv | [int64](#int64) |  | Transaction value (crypto transfers amount, tv is in tiny bars divided by 1000, rounded down) |
 | bpr | [int64](#int64) |  | Bytes per response |
@@ -734,6 +662,7 @@ The information about a node
 | ipAddress | [bytes](#bytes) |  | The ip address of the Node with separator &amp; octets |
 | portno | [int32](#int32) |  | The port number of the grpc server for the node |
 | memo | [bytes](#bytes) |  | The memo field of the node |
+| RSA_PubKey | [string](#string) |  | The RSA public key of the node. |
 
 
 
@@ -897,14 +826,14 @@ This message is deprecated and succeeded by SignaturePair and SignatureMap messa
 <a name="proto.TopicID"></a>
 
 ### TopicID
-The ID for a topic (used by the consensus sequencing service)
+Unique identifier for a topic (used by the consensus service)
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | shardNum | [int64](#int64) |  | The shard number (nonnegative) |
 | realmNum | [int64](#int64) |  | The realm number (nonnegative) |
-| accountNum | [int64](#int64) |  | A nonnegative account number unique within its realm |
+| topicNum | [int64](#int64) |  | Unique topic identifier within a realm (nonnegative). |
 
 
 
@@ -983,11 +912,17 @@ The functionality provided by hedera hashgraph
 | SystemDelete | 28 | system delete file |
 | SystemUndelete | 29 | system undelete file |
 | ContractDelete | 30 | delete contract |
-| ConsensusCreateTopic | 31 |  |
-| ConsensusUpdateTopic | 32 |  |
-| ConsensusDeleteTopic | 33 |  |
-| ConsensusGetInfo | 34 |  |
-| ConsensusSubmitMessage | 35 |  |
+| Freeze | 31 | freeze |
+| CreateTransactionRecord | 32 | Create Tx Record |
+| CryptoAccountAutoRenew | 33 | Crypto Auto Renew |
+| ContractAutoRenew | 34 | Contract Auto Renew |
+| getVersion | 35 | Get Version |
+| TransactionGetReceipt | 36 | Transaction Get Receipt |
+| ConsensusCreateTopic | 50 | New functionality in the HCS release |
+| ConsensusUpdateTopic | 51 |  |
+| ConsensusDeleteTopic | 52 |  |
+| ConsensusGetTopicInfo | 53 |  |
+| ConsensusSubmitMessage | 54 |  |
 
 
  
@@ -1008,14 +943,16 @@ The functionality provided by hedera hashgraph
 <a name="proto.ConsensusCreateTopicTransactionBody"></a>
 
 ### ConsensusCreateTopicTransactionBody
-
+See [ConsensusService.createTopic()](#proto.ConsensusService)
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| shardID | [ShardID](#proto.ShardID) |  | Shard for this topic. |
-| realmID | [RealmID](#proto.RealmID) |  | Realm for the topic. |
-| topicDefinition | [ConsensusTopicDefinition](#proto.ConsensusTopicDefinition) |  |  |
+| memo | [string](#string) |  | Short publicly visible memo about the topic. No guarantee of uniqueness. |
+| adminKey | [Key](#proto.Key) |  | Access control for update/delete of the topic. If unspecified, no access control is performed to extend the expirationTime of the topic via ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is not allowed. |
+| submitKey | [Key](#proto.Key) |  | Access control for ConsensusService.submitMessage. If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed). |
+| validStartTime | [Timestamp](#proto.Timestamp) |  | Effective timestamp at which submitMessage calls will begin to succeed on the topic. If unspecified, the consensus timestamp of this transaction will be the effective creationTime. |
+| expirationTime | [Timestamp](#proto.Timestamp) |  | Effective timestamp at (and after) which submitMessage calls will no longer succeed on the topic. If unspecified, the consensus timestamp &#43; MAX_LIFETIME_SECONDS will become the effective expirationTime. The expirationTime may be no longer than MAX_LIFETIME_SECONDS from the consensus timestamp of this transaction. |
 
 
 
@@ -1041,7 +978,7 @@ The functionality provided by hedera hashgraph
 <a name="proto.ConsensusDeleteTopicTransactionBody"></a>
 
 ### ConsensusDeleteTopicTransactionBody
-
+See [ConsensusService.deleteTopic()](#proto.ConsensusService)
 
 
 | Field | Type | Label | Description |
@@ -1062,41 +999,41 @@ The functionality provided by hedera hashgraph
 
 
 
-<a name="ConsensusGetInfo.proto"></a>
+<a name="ConsensusGetTopicInfo.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## ConsensusGetInfo.proto
+## ConsensusGetTopicInfo.proto
 
 
 
-<a name="proto.ConsensusGetInfoQuery"></a>
+<a name="proto.ConsensusGetTopicInfoQuery"></a>
 
-### ConsensusGetInfoQuery
-See [ConsensusService.getInfo()](#proto.ConsensusService)
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| header | [QueryHeader](#proto.QueryHeader) |  | standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). |
-| topicID | [TopicID](#proto.TopicID) |  | Topic to retrieve info about (the running state of). |
-
-
-
-
-
-
-<a name="proto.ConsensusGetInfoResponse"></a>
-
-### ConsensusGetInfoResponse
-Retrieve info about a consensus topic.
+### ConsensusGetTopicInfoQuery
+See [ConsensusService.getTopicInfo()](#proto.ConsensusService)
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| header | [ResponseHeader](#proto.ResponseHeader) |  | standard response from node to client, including the requested fields: cost, or state proof, or both, or neither |
+| header | [QueryHeader](#proto.QueryHeader) |  | Standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). |
+| topicID | [TopicID](#proto.TopicID) |  | Topic to retrieve info about (the parameters and running state of). |
+
+
+
+
+
+
+<a name="proto.ConsensusGetTopicInfoResponse"></a>
+
+### ConsensusGetTopicInfoResponse
+Retrieve the parameters of and state of a consensus topic.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| header | [ResponseHeader](#proto.ResponseHeader) |  | Standard response from node to client, including the requested fields: cost, or state proof, or both, or neither. |
 | topicID | [TopicID](#proto.TopicID) |  | Topic identifier. |
-| topicDefinition | [ConsensusTopicDefinition](#proto.ConsensusTopicDefinition) |  | Topic definition. |
-| topicState | [ConsensusTopicState](#proto.ConsensusTopicState) |  | Topic&#39;s consensus state. |
+| topicDefinition | [ConsensusTopicDefinition](#proto.ConsensusTopicDefinition) |  | Topic definition, modified by createTopic/updateTopic/deleteTopic |
+| topicState | [ConsensusTopicState](#proto.ConsensusTopicState) |  | Topic&#39;s state as last modified by a submitMessage. |
 
 
 
@@ -1142,7 +1079,11 @@ Authorization as to modification (_update/delete_) of the topic is based on the 
 These authorization rules allow for the use of digital signature verification on a single key, set of keys (M-of-N
 signatures required), contract evaluation, etc.
 
-Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until date/time T.
+Topics may also have timespans affecting the validity of submitted messages; ie - valid from date/time T until
+date/time T.
+
+The default expiration of a topic is 365 days (* 86400 seconds) from creation unless a sooner expiration is
+specified for the default transaction fee.
 
 A state proof, verifiable by any Hedera Hashgraph node, may be requested for the topic.
 
@@ -1153,8 +1094,8 @@ definition and the consensus ordering and timestamp of submitted messages.
 | ----------- | ------------ | ------------- | ------------|
 | createTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Create a topic to be used for consensus. Request is [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody) |
 | updateTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Update a topic. Request is [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody) |
-| deleteTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Mark a topic as deleted. Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody) |
-| getInfo | [Query](#proto.Query) | [Response](#proto.Response) | Retrieve information about a topic including the latest state (sequenceNumber and runningHash), and the topic&#39;s definition (valid message submission timespan, authorization rules, etc). Request is [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery) Response is [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse) |
+| deleteTopic | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Delete a topic. No more transactions on the topic are allowed. Request is [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody) |
+| getTopicInfo | [Query](#proto.Query) | [Response](#proto.Response) | Retrieve the parameters of and state of a topic including the latest state (sequenceNumber and runningHash), and the topic&#39;s definition (valid message submission timespan, authorization rules, etc). Request is [ConsensusGetTopicInfoQuery](#proto.ConsensusGetTopicInfoQuery) Response is [ConsensusGetTopicInfoResponse](#proto.ConsensusGetTopicInfoResponse) |
 | submitMessage | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Submit a message for consensus. Valid and authorized messages on valid topics will be ordered by the consensus service, gossipped to the mirror net, and published (in order) to all subscribers (from the mirror net) on this topic. Request is [ConsensusSubmitMessageTransactionBody](#proto.ConsensusSubmitMessageTransactionBody) |
 
  
@@ -1171,13 +1112,13 @@ definition and the consensus ordering and timestamp of submitted messages.
 <a name="proto.ConsensusSubmitMessageTransactionBody"></a>
 
 ### ConsensusSubmitMessageTransactionBody
-TODO: 4000 bytes may be incorrect (too large).
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | topicID | [TopicID](#proto.TopicID) |  | Topic to submit message to. |
-| message | [bytes](#bytes) |  | Message to be submitted. Max size 4000 bytes. |
+| message | [bytes](#bytes) |  | Message to be submitted. Max size of the Transaction (including signatures) is 4kB. |
 
 
 
@@ -1203,18 +1144,16 @@ TODO: 4000 bytes may be incorrect (too large).
 <a name="proto.ConsensusTopicDefinition"></a>
 
 ### ConsensusTopicDefinition
-Metadata about the topic that is defined on creation and modified via enforcement of rules specified by the adminKey.
+Parameters of the topic which are modifiable by the rules specified in the adminKey.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| memo | [string](#string) |  | Short non-unique, publicly visible memo about the topic. |
-| creationTime | [Timestamp](#proto.Timestamp) |  | When the topic should become available to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests _before_ this timestamp. If unspecified, no creation timestamp is used. |
-| expirationTime | [Timestamp](#proto.Timestamp) |  | When the topic should cease availability to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests from this timestamp forward. If unspecified, no expiration timestamp is used.
-
-When the topic should cease accepting transactions. |
-| adminKey | [Key](#proto.Key) |  | Who can change/delete this topic. Defaults to requester if unspecified on create. |
-| submitKey | [Key](#proto.Key) |  | Who can submitMessage (empty means anyone can). Defaults to allowing anyone to submit. |
+| memo | [string](#string) |  | Short publicly visible memo about the topic. No guarantee of uniqueness. |
+| validStartTime | [Timestamp](#proto.Timestamp) |  | When the topic should become available to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests _before_ this timestamp. If unspecified, no creation timestamp is used. |
+| expirationTime | [Timestamp](#proto.Timestamp) |  | When the topic should cease availability to receive messages via ConsensusService.submitMessage(). The topic will not accept submitMessage() requests from this timestamp forward. |
+| adminKey | [Key](#proto.Key) |  | Access control for update/delete of the topic. If unspecified, no access control is performed to extend the expirationTime of the topic via ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is not allowed. |
+| submitKey | [Key](#proto.Key) |  | Access control for ConsensusService.submitMessage. If unspecified, no access control is performed on ConsensusService.submitMessage (all submissions are allowed). |
 
 
 
@@ -1245,8 +1184,9 @@ The consensus state of a topic.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| sequenceNumber | [uint64](#uint64) |  | Starts at 0 for first submitted message. Incremented on each submitted message. |
-| runningHash | [bytes](#bytes) |  | Running hash of every (message, sequenceNumber, topicID) tuple in this topic. |
+| sequenceNumber | [uint64](#uint64) |  | Starts at 1 for first submitted message. Incremented on each submitted message. |
+| runningHash | [bytes](#bytes) |  | Running hash (SHA384) of every message. Initially the runningHash is empty. Subsequent messages update the running hash to SHA384(previousRunningHash, topicID, consensusTimestamp, sequenceNumber, message) |
+| consensusTimestamp | [Timestamp](#proto.Timestamp) |  |  |
 
 
 
@@ -1272,17 +1212,17 @@ The consensus state of a topic.
 <a name="proto.ConsensusUpdateTopicTransactionBody"></a>
 
 ### ConsensusUpdateTopicTransactionBody
-
+See [ConsensusService.updateTopic()](#proto.ConsensusService)
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | topicID | [TopicID](#proto.TopicID) |  |  |
-| memo | [string](#string) |  |  |
-| creationTime | [Timestamp](#proto.Timestamp) |  |  |
-| expirationTime | [Timestamp](#proto.Timestamp) |  |  |
-| adminKey | [Key](#proto.Key) |  | Who can change/delete this topic |
-| submitKey | [Key](#proto.Key) |  | Who can submitMessage (empty means anyone can). |
+| memo | [google.protobuf.StringValue](#google.protobuf.StringValue) |  | Short publicly visible memo about the topic. No guarantee of uniqueness. Null for &#34;do not update&#34;. |
+| validStartTime | [Timestamp](#proto.Timestamp) |  | Effective timestamp at which submitMessage calls will begin to succeed on the topic. If unspecified, the validStartTime of this topic will remain unchanged. |
+| expirationTime | [Timestamp](#proto.Timestamp) |  | Effective timestamp at which submitMessage calls will no longer succeed on the topic. If unspecified, the expirationTime of the topic will remain unchanged. If specified, the topic&#39;s lifetime may not be extended past MAX_LIFETIME_SECONDS from now (internal system config) |
+| adminKey | [Key](#proto.Key) |  | Access control for update/delete of the topic. If unspecified, no change. If empty key - no access control is performed to extend the expirationTime of the topic via ConsensusService.updateTopic, but that is the only update allowed and ConsensusService.deleteTopic is not allowed. |
+| submitKey | [Key](#proto.Key) |  | Access control for ConsensusService.submitMessage. If unspecified, no change. If empty key - no access control is performed on ConsensusService.submitMessage (all submissions are allowed). |
 
 
 
@@ -1344,16 +1284,16 @@ If this function stores information, it is charged gas to store it. There is a f
 <a name="proto.ContractCallLocalQuery"></a>
 
 ### ContractCallLocalQuery
-Call a function of the given smart contract instance, giving it functionParameters as its inputs. It can use the given amount of gas, and any unspent gas will be refunded to the paying account.
+Call a function of the given smart contract instance, giving it functionParameters as its inputs. It will consume the entire given amount of gas.
 
 This is performed locally on the particular node that the client is communicating with. It cannot change the state of the contract instance (and so, cannot spend anything from the instance&#39;s cryptocurrency account). It will not have a consensus timestamp. It cannot generate a record or a receipt. The response will contain the output returned by the function call.  This is useful for calling getter functions, which purely read the state and don&#39;t change it. It is faster and cheaper than a normal call, because it is purely local to a single  node.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| header | [QueryHeader](#proto.QueryHeader) |  | standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). |
+| header | [QueryHeader](#proto.QueryHeader) |  | standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). The payment must cover the fees and all of the gas offered. |
 | contractID | [ContractID](#proto.ContractID) |  | the contract instance to call, in the format used in transactions |
-| gas | [int64](#int64) |  | the amount of gas to use for the call |
+| gas | [int64](#int64) |  | the amount of gas to use for the call. All of the gas offered will be charged for. |
 | functionParameters | [bytes](#bytes) |  | which function to call, and the parameters to pass to the function |
 | maxResultSize | [int64](#int64) |  | max number of bytes that the result might include. The run will fail if it would have returned more than this number of bytes. |
 
@@ -1614,6 +1554,7 @@ Response when the client sends the node ContractGetInfoQuery
 | autoRenewPeriod | [Duration](#proto.Duration) |  | the expiration time will extend every this many seconds. If there are insufficient funds, then it extends as long as possible. If the account is empty when it expires, then it is deleted. |
 | storage | [int64](#int64) |  | number of bytes of storage being used by this instance (which affects the cost to extend the expiration time) |
 | memo | [string](#string) |  | the memo associated with the contract (max 100 bytes) |
+| balance | [uint64](#uint64) |  | The current balance, in tinybars |
 
 
 
@@ -1700,38 +1641,6 @@ Modify a smart contract instance to have the given parameter values. Any null fi
 | autoRenewPeriod | [Duration](#proto.Duration) |  | The instance will charge its account every this many seconds to renew for this long |
 | fileID | [FileID](#proto.FileID) |  | The file ID of file containing the smart contract byte code. A copy will be made and held by the contract instance, and have the same expiration time as the instance. The file is referenced one of two ways: |
 | memo | [string](#string) |  | The memo associated with the contract (max 100 bytes) |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="CreateFeeSchedule.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## CreateFeeSchedule.proto
-
-
-
-<a name="proto.CreateFeeScheduleTransactionBody"></a>
-
-### CreateFeeScheduleTransactionBody
-The transaction body to update the fee schedule.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [Key](#proto.Key) |  | The key that must sign to update the Fee Schedule |
-| transactionFeeSchedule | [TransactionFeeSchedule](#proto.TransactionFeeSchedule) | repeated | The fee schedule for a specific hedera functionality and the time period this fee will be valid for the transaction |
 
 
 
@@ -1925,6 +1834,7 @@ Get the balance of a cryptocurrency account. This returns only the balance, so i
 | ----- | ---- | ----- | ----------- |
 | header | [QueryHeader](#proto.QueryHeader) |  | Standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither). |
 | accountID | [AccountID](#proto.AccountID) |  | The account ID for which information is requested |
+| contractID | [ContractID](#proto.ContractID) |  | The account ID for which information is requested |
 
 
 
@@ -2742,6 +2652,66 @@ If a file was created without ANY keys in the keys field, ONLY the expirationTim
 
 
 
+<a name="Freeze.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## Freeze.proto
+
+
+
+<a name="proto.FreezeTransactionBody"></a>
+
+### FreezeTransactionBody
+Set the freezing period in which the platform will stop creating events and accepting transactions. This is used before safely shut down the platform for maintenance.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| startHour | [int32](#int32) |  | The start hour (in UTC time), a value between 0 and 23 |
+| startMin | [int32](#int32) |  | The start minute (in UTC time), a value between 0 and 59 |
+| endHour | [int32](#int32) |  | The end hour (in UTC time), a value between 0 and 23 |
+| endMin | [int32](#int32) |  | The end minute (in UTC time), a value between 0 and 59 |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="FreezeService.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## FreezeService.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="proto.FreezeService"></a>
+
+### FreezeService
+The request and responses for freeze service.
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| freeze | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Freezes the nodes by submitting the transaction. The grpc server returns the TransactionResponse |
+
+ 
+
+
+
 <a name="GetByKey.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2889,7 +2859,7 @@ A single query, which is sent from the client to the node. This includes all pos
 | transactionGetReceipt | [TransactionGetReceiptQuery](#proto.TransactionGetReceiptQuery) |  | Get a receipt for a transaction (lasts 180 seconds) |
 | transactionGetRecord | [TransactionGetRecordQuery](#proto.TransactionGetRecordQuery) |  | Get a record for a transaction (lasts 1 hour) |
 | transactionGetFastRecord | [TransactionGetFastRecordQuery](#proto.TransactionGetFastRecordQuery) |  | Get a record for a transaction (lasts 180 seconds) |
-| consensusGetInfo | [ConsensusGetInfoQuery](#proto.ConsensusGetInfoQuery) |  | Get info about a consensus topic. |
+| consensusGetTopicInfo | [ConsensusGetTopicInfoQuery](#proto.ConsensusGetTopicInfoQuery) |  | Get the parameters of and state of a consensus topic. |
 
 
 
@@ -2982,7 +2952,7 @@ A single response, which is returned from the node to the client, after the clie
 | transactionGetReceipt | [TransactionGetReceiptResponse](#proto.TransactionGetReceiptResponse) |  | Get a receipt for a transaction (lasts 180 seconds) |
 | transactionGetRecord | [TransactionGetRecordResponse](#proto.TransactionGetRecordResponse) |  | Get a record for a transaction (lasts 1 hour) |
 | transactionGetFastRecord | [TransactionGetFastRecordResponse](#proto.TransactionGetFastRecordResponse) |  | Get a record for a transaction (lasts 180 seconds) |
-| consensusGetInfo | [ConsensusGetInfoResponse](#proto.ConsensusGetInfoResponse) |  | Info about a consensus topic. |
+| consensusGetTopicInfo | [ConsensusGetTopicInfoResponse](#proto.ConsensusGetTopicInfoResponse) |  | Parameters of and state of a consensus topic.. |
 
 
 
@@ -3103,11 +3073,39 @@ A single response, which is returned from the node to the client, after the clie
 | INVALID_RECEIVE_RECORD_THRESHOLD | 86 | attempt to set negative receive record threshold |
 | INVALID_SEND_RECORD_THRESHOLD | 87 | attempt to set negative send record threshold |
 | ACCOUNT_IS_NOT_GENESIS_ACCOUNT | 88 | Special Account Operations should be performed by only Genesis account, return this code if it is not Genesis Account |
-| INVALID_TOPIC_ID | 89 |  |
-| TOPIC_DELETED | 90 |  |
-| MESSAGE_TOO_LONG | 91 |  |
-| TOPIC_NOT_YET_ENABLED | 92 |  |
-| TOPIC_EXPIRED | 93 |  |
+| PAYER_ACCOUNT_UNAUTHORIZED | 89 | The fee payer account doesn&#39;t have permission to submit such Transaction |
+| INVALID_FREEZE_TRANSACTION_BODY | 90 | FreezeTransactionBody is invalid |
+| FREEZE_TRANSACTION_BODY_NOT_FOUND | 91 | FreezeTransactionBody does not exist |
+| TRANSFER_LIST_SIZE_LIMIT_EXCEEDED | 92 | Exceeded the number of accounts (both from and to) allowed for crypto transfer list |
+| RESULT_SIZE_LIMIT_EXCEEDED | 93 | Smart contract result size greater than specified maxResultSize |
+| NOT_SPECIAL_ACCOUNT | 94 | The payer account is not a special account(account 0.0.55) |
+| CONTRACT_NEGATIVE_GAS | 95 | Negative gas was offered in smart contract call |
+| CONTRACT_NEGATIVE_VALUE | 96 | Negative value / initial balance was specified in a smart contract call / create |
+| INVALID_FEE_FILE | 97 | Failed to update fee file |
+| INVALID_EXCHANGE_RATE_FILE | 98 | Failed to update exchange rate file |
+| INSUFFICIENT_LOCAL_CALL_GAS | 99 | Payment tendered for contract local call cannot cover both the fee and the gas |
+| ENTITY_NOT_ALLOWED_TO_DELETE | 100 | Entities with Entity ID below 1000 are not allowed to be deleted |
+| AUTHORIZATION_FAILED | 101 | Violating one of these rules: 1) treasury account can update all entities below 0.0.1000, 2) account 0.0.50 can update all entities from 0.0.51 - 0.0.80, 3) Network Function Master Account A/c 0.0.50 - Update all Network Function accounts &amp; perform all the Network Functions listed below, 4) Network Function Accounts: i) A/c 0.0.55 - Update Address Book files (0.0.101/102), ii) A/c 0.0.56 - Update Fee schedule (0.0.111), iii) A/c 0.0.57 - Update Exchange Rate (0.0.112). |
+| FILE_UPLOADED_PROTO_INVALID | 102 | Fee Schedule Proto uploaded but not valid (append or update is required) |
+| FILE_UPLOADED_PROTO_NOT_SAVED_TO_DISK | 103 | Fee Schedule Proto uploaded but not valid (append or update is required) |
+| FEE_SCHEDULE_FILE_PART_UPLOADED | 104 | Fee Schedule Proto File Part uploaded |
+| EXCHANGE_RATE_CHANGE_LIMIT_EXCEEDED | 105 | The change on Exchange Rate exceeds Exchange_Rate_Allowed_Percentage |
+| MAX_CONTRACT_STORAGE_EXCEEDED | 106 | Contract permanent storage exceeded the currently allowable limit |
+| TRANSAFER_ACCOUNT_SAME_AS_DELETE_ACCOUNT | 107 | Transfer Account should not be same as Account to be deleted |
+| TOTAL_LEDGER_BALANCE_INVALID | 108 |  |
+| EXPIRATION_REDUCTION_NOT_ALLOWED | 110 | The expiration date/time on a smart contract may not be reduced |
+| INVALID_TOPIC_ID | 150 | HCS release below this point
+
+The Topic ID specified is not in the system. |
+| TOPIC_DELETED | 151 | The Topic referenced is in a deleted state for a period of time pending removal from the system. No ConsensusService transactions on this topic will succeed once the topic is deleted, though getTopicInfo() may return the topic&#39;s state. |
+| MESSAGE_TOO_LONG | 152 |  |
+| TOPIC_NOT_ENABLED | 153 | An attempted ConsensusService.submitMessage failed due to being called outside the valid time period for the topic, defined by the topic&#39;s creationTimestamp and expirationTimestamp. All other operations on the topic will succeed. |
+| INVALID_TOPIC_VALID_START_TIME | 154 |  |
+| INVALID_TOPIC_EXPIRATION_TIME | 155 |  |
+| INVALID_TOPIC_ADMIN_KEY | 156 |  |
+| INVALID_TOPIC_SUBMIT_KEY | 157 |  |
+| UNAUTHORIZED | 158 | An attempted ConsensusService operation failed due to missing/insufficient signatures. |
+| INVALID_TOPIC_MESSAGE | 159 | A ConsensusService message is empty. |
 
 
  
@@ -3135,7 +3133,7 @@ Every query receives a response containing the QueryResponseHeader. Either or bo
 | ----- | ---- | ----- | ----------- |
 | nodeTransactionPrecheckCode | [ResponseCodeEnum](#proto.ResponseCodeEnum) |  | Result of fee transaction precheck, saying it passed, or why it failed |
 | responseType | [ResponseType](#proto.ResponseType) |  | The requested response is repeated back here, for convenience |
-| cost | [uint64](#uint64) |  | The fee that would be charged to get the requested information (if a cost was requested) |
+| cost | [uint64](#uint64) |  | The fee that would be charged to get the requested information (if a cost was requested). Note: This cost only includes the query fee and does not include the transfer fee(which is required to execute the transfer transaction to debit the payer account and credit the node account with query fee) |
 | stateProof | [bytes](#bytes) |  | The state proof for this information (if a state proof was requested, and is available) |
 
 
@@ -3181,6 +3179,8 @@ The request and responses for different smart contract services.
 | getBySolidityID | [Query](#proto.Query) | [Response](#proto.Response) | Retrieves a contract(using Solidity ID) by submitting the query. The grpc server returns the Response |
 | getTxRecordByContractID | [Query](#proto.Query) | [Response](#proto.Response) | Retrieves a contract(using contract ID) by submitting the query. The grpc server returns the Response |
 | deleteContract | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Delete a contract instance(mark as deleted until it expires), and transfer hbars to the specified account. The grpc server returns the TransactionResponse |
+| systemDelete | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | Deletes a smart contract by submitting the transaction when the account has admin privileges on the file. The grpc server returns the TransactionResponse |
+| systemUndelete | [Transaction](#proto.Transaction) | [TransactionResponse](#proto.TransactionResponse) | UnDeletes a smart contract by submitting the transaction when the account has admin privileges on the file. The grpc server returns the TransactionResponse |
 
  
 
@@ -3350,7 +3350,7 @@ A single transaction. All transaction types are possible here.
 | ----- | ---- | ----- | ----------- |
 | transactionID | [TransactionID](#proto.TransactionID) |  | The ID for this transaction, which includes the payer&#39;s account (the account paying the transaction fee). If two transactions have the same transactionID, they won&#39;t both have an effect |
 | nodeAccountID | [AccountID](#proto.AccountID) |  | The account of the node that submits the client&#39;s transaction to the network |
-| transactionFee | [uint64](#uint64) |  | The fee the client pays, which is split between the network and the node |
+| transactionFee | [uint64](#uint64) |  | The maximum transaction fee the client is willing to pay, which is split between the network and the node |
 | transactionValidDuration | [Duration](#proto.Duration) |  | The transaction is invalid if consensusTimestamp &gt; transactionID.transactionValidStart &#43; transactionValidDuration |
 | generateRecord | [bool](#bool) |  | Should a record of this transaction be generated? (A receipt is always generated, but the record is optional) |
 | memo | [string](#string) |  | Any notes or descriptions that should be put into the record (max length 100) |
@@ -3370,6 +3370,7 @@ A single transaction. All transaction types are possible here.
 | fileUpdate | [FileUpdateTransactionBody](#proto.FileUpdateTransactionBody) |  | Modify information such as the expiration date for a file |
 | systemDelete | [SystemDeleteTransactionBody](#proto.SystemDeleteTransactionBody) |  | Hedera multisig system deletes a file or smart contract |
 | systemUndelete | [SystemUndeleteTransactionBody](#proto.SystemUndeleteTransactionBody) |  | To undelete an entity deleted by SystemDelete |
+| freeze | [FreezeTransactionBody](#proto.FreezeTransactionBody) |  | Freeze the nodes |
 | consensusCreateTopic | [ConsensusCreateTopicTransactionBody](#proto.ConsensusCreateTopicTransactionBody) |  |  |
 | consensusUpdateTopic | [ConsensusUpdateTopicTransactionBody](#proto.ConsensusUpdateTopicTransactionBody) |  |  |
 | consensusDeleteTopic | [ConsensusDeleteTopicTransactionBody](#proto.ConsensusDeleteTopicTransactionBody) |  |  |
@@ -3553,6 +3554,9 @@ The consensus result for a transaction, which might not be currently known, or m
 | fileID | [FileID](#proto.FileID) |  | The file ID, if a new file was created |
 | contractID | [ContractID](#proto.ContractID) |  | The contract ID, if a new smart contract instance was created |
 | exchangeRate | [ExchangeRateSet](#proto.ExchangeRateSet) |  | exchange rate set of Hbar to cents (USD) |
+| topicID | [TopicID](#proto.TopicID) |  | TopicID of a newly created consensus service topic |
+| topicSequenceNumber | [uint64](#uint64) |  | Updated sequence number for a consensus service topic. The result of a ConsensusSubmitMessage. |
+| topicRunningHash | [bytes](#bytes) |  | Updated running hash for a consensus service topic. The result of a ConsensusSubmitMessage. |
 
 
 
@@ -3588,10 +3592,10 @@ Response when the client sends the node TransactionGetRecordResponse
 | consensusTimestamp | [Timestamp](#proto.Timestamp) |  | The consensus timestamp (or null if didn&#39;t reach consensus yet) |
 | transactionID | [TransactionID](#proto.TransactionID) |  | The ID of the transaction this record represents |
 | memo | [string](#string) |  | The memo that was submitted as part of the transaction (max 100 bytes) |
-| transactionFee | [uint64](#uint64) |  | The transaction fee in the transaction |
+| transactionFee | [uint64](#uint64) |  | The actual transaction fee charged, not the original transactionFee value from TransactionBody |
 | contractCallResult | [ContractFunctionResult](#proto.ContractFunctionResult) |  | Record of the value returned by the smart contract function (if it completed and didn&#39;t fail) from ContractCallTransaction |
 | contractCreateResult | [ContractFunctionResult](#proto.ContractFunctionResult) |  | Record of the value returned by the smart contract constructor (if it completed and didn&#39;t fail) from ContractCreateTransaction |
-| transferList | [TransferList](#proto.TransferList) |  | Record of results of a CryptoTransferTransaction |
+| transferList | [TransferList](#proto.TransferList) |  | All hbar transfers as a result of this transaction, such as fees, or transfers performed by the transaction, or by a smart contract it calls, or by the creation of threshold records that it triggers. |
 
 
 
@@ -3617,12 +3621,13 @@ Response when the client sends the node TransactionGetRecordResponse
 <a name="proto.TransactionResponse"></a>
 
 ### TransactionResponse
-When the client sends the node a transaction of any kind, the node replies with this, which simply says that the transaction passed the precheck (so the node will submit it to the network) or it failed (so it won&#39;t). To learn the consensus result, the client should later obtain a receipt (free), or can buy a more detailed record (not free).
+When the client sends the node a transaction of any kind, the node replies with this, which simply says that the transaction passed the precheck (so the node will submit it to the network) or it failed (so it won&#39;t). If the fee offered was insufficient, this will also contain the amount of the required fee. To learn the consensus result, the client should later obtain a receipt (free), or can buy a more detailed record (not free).
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | nodeTransactionPrecheckCode | [ResponseCodeEnum](#proto.ResponseCodeEnum) |  | The response code that indicates the current status of the transaction. |
+| cost | [uint64](#uint64) |  | If the response code was INSUFFICIENT_TX_FEE, the actual transaction fee that would be required to execute the transaction. |
 
 
 
